@@ -500,6 +500,26 @@ class HEADatabase:
         }
 
 
+    def get_full_data(self, required_elements: list = None) -> 'pd.DataFrame':
+        """Get full DataFrame for matching combinations."""
+        import duckdb
+        parquet_path = os.path.join(self.parquet_dir, "hea_data.parquet")
+        if not os.path.exists(parquet_path):
+            raise FileNotFoundError("Database not generated yet")
+        
+        if required_elements:
+            conditions = [f"elements_sorted LIKE '%{elem}%'" for elem in required_elements]
+            where_clause = " AND ".join(conditions)
+            query = f"""
+            SELECT * FROM read_parquet('{parquet_path}')
+            WHERE {where_clause}
+            """
+        else:
+            query = f"SELECT * FROM read_parquet('{parquet_path}')"
+        
+        return self.conn.execute(query).fetchdf()
+
+
 # ============================================================
 # HEA Sub-Agents
 # ============================================================
@@ -536,13 +556,13 @@ class HEA_DBA:
             if stats:
                 combo_stats.append(stats)
         
-        data = self.db.query_combinations_containing(required)
+        data = self.db.get_full_data(required)
         
         return {
             'matching_combinations': matching_combos,
             'n_combinations': len(matching_combos),
             'combination_statistics': combo_stats,
-            'total_samples': len(data),
+        'total_samples': len(data),
             'data': data
         }
 
@@ -757,6 +777,8 @@ class HEAExecutor:
         parsed = self.dba.parse_task(task_description)
         if 'required_elements' in task_input:
             parsed['required_elements'] = task_input['required_elements']
+        elif 'required_elements' in task:
+            parsed['required_elements'] = task['required_elements']
         
         if not self.initialized:
             self.initialize_database(target_elements=parsed['required_elements'])
