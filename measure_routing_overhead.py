@@ -17,18 +17,13 @@ sys.path.insert(0, '/workspace')
 def measure_routing_overhead(n_trials=50):
     """
     Measure the routing overhead of the OpenAaaS server.
-    
-    Measures the time for:
-    1. Service registration
-    2. Task submission
-    3. Task polling
-    4. Result reporting
-    5. Full round-trip (submit → poll → execute → report → retrieve)
     """
     from openaaas.server import OpenAaaSServer
     
     # Create server with in-memory DB
-    server = OpenAaaSServer(db_path=":memory:", admin_api_key="admin-key-default")
+    import tempfile
+    db_path = tempfile.mktemp(suffix=".db")
+    server = OpenAaaSServer(db_path=db_path, admin_api_key="admin-key-default")
     server.app.config['TESTING'] = True
     client = server.app.test_client()
     
@@ -39,43 +34,47 @@ def measure_routing_overhead(n_trials=50):
         "result_report_times_ms": [],
         "full_roundtrip_times_ms": [],
         "heartbeat_times_ms": [],
-        "service_list_times_ms": []
+        "service_list_times_ms": [],
+        "task_retrieve_times_ms": []
     }
     
-    # Register a test service
+    # Register test services
     print("Measuring service registration overhead...")
+    service_ids = []
+    api_keys = []
     for i in range(min(n_trials, 10)):
         start = time.perf_counter()
-        resp = client.post('/api/services/register', 
+        resp = client.post('/api/v1/services/register', 
             json={
                 "service_name": f"test-service-{i}",
                 "description": f"Test service {i} for overhead measurement",
-                "domain": "test",
-                "capabilities": ["test", "benchmark"],
-                "api_key": f"test-key-{i}"
-            },
-            headers={"X-Admin-Key": "admin-key-default"}
-        )
+                "domain_tag": "test",
+                "capacity": 100
+            })
         elapsed = (time.perf_counter() - start) * 1000
         results["registration_times_ms"].append(elapsed)
+        
+        data = resp.get_json()
+        if data and "service_id" in data:
+            service_ids.append(data["service_id"])
+            api_keys.append(data["api_key"])
     
     # Use the first registered service
-    service_name = "test-service-0"
-    api_key = "test-key-0"
+    service_id = service_ids[0]
+    api_key = api_keys[0]
     
     # Measure task submission
     print("Measuring task submission overhead...")
     task_ids = []
     for i in range(n_trials):
         start = time.perf_counter()
-        resp = client.post('/api/tasks/submit',
+        resp = client.post('/api/v1/tasks/submit',
             json={
-                "service_name": service_name,
-                "task_type": "test",
-                "payload": {"query": f"test query {i}", "data": "x" * 100}
-            },
-            headers={"X-API-Key": api_key}
-        )
+                "service_id": service_id,
+                "description": f"Test task {i}",
+                "input": {"query": f"test query {i}", "data": "x" * 100},
+                "timeout": 3600
+            })
         elapsed = (time.perf_counter() - start) * 1000
         results["task_submit_times_ms"].append(elapsed)
         
@@ -88,42 +87,45 @@ def measure_routing_overhead(n_trials=50):
     polled_task_ids = []
     for i in range(n_trials):
         start = time.perf_counter()
-        resp = client.get(f'/api/tasks/poll/{service_name}',
-            headers={"X-API-Key": api_key}
-        )
+        resp = client.post('/api/v1/tasks/poll',
+            json={"service_id": service_id})
         elapsed = (time.perf_counter() - start) * 1000
         results["task_poll_times_ms"].append(elapsed)
         data = resp.get_json()
-        if data and "task_id" in data:
-            polled_task_ids.append(data["task_id"])
+        if data and data.get("task") and data["task"].get("task_id"):
+            polled_task_ids.append(data["task"]["task_id"])
     
     # Measure result reporting
     print("Measuring result reporting overhead...")
     for i, tid in enumerate(polled_task_ids[:n_trials]):
         start = time.perf_counter()
-        resp = client.post(f'/api/tasks/{tid}/result',
+        resp = client.post(f'/api/v1/tasks/{tid}/result',
             json={
                 "status": "completed",
-                "result": {"output": f"result {i}", "data": "y" * 200}
-            },
-            headers={"X-API-Key": api_key}
-        )
+                "output": {"result": f"result {i}", "data": "y" * 200}
+            })
         elapsed = (time.perf_counter() - start) * 1000
         results["result_report_times_ms"].append(elapsed)
+    
+    # Measure task retrieval
+    print("Measuring task retrieval overhead...")
+    for tid in polled_task_ids[:n_trials]:
+        start = time.perf_counter()
+        resp = client.get(f'/api/v1/tasks/{tid}')
+        elapsed = (time.perf_counter() - start) * 1000
+        results["task_retrieve_times_ms"].append(elapsed)
     
     # Measure heartbeat
     print("Measuring heartbeat overhead...")
     for i in range(n_trials):
         start = time.perf_counter()
-        resp = client.post('/api/heartbeat',
+        resp = client.post('/api/v1/heartbeat',
             json={
-                "service_name": service_name,
+                "service_id": service_id,
                 "status": "healthy",
                 "load": 0.5,
-                "capacity": 10
-            },
-            headers={"X-API-Key": api_key}
-        )
+                "capacity": 100
+            })
         elapsed = (time.perf_counter() - start) * 1000
         results["heartbeat_times_ms"].append(elapsed)
     
@@ -131,48 +133,38 @@ def measure_routing_overhead(n_trials=50):
     print("Measuring service listing overhead...")
     for i in range(n_trials):
         start = time.perf_counter()
-        resp = client.get('/api/services',
-            headers={"X-API-Key": api_key}
-        )
+        resp = client.get('/api/v1/services')
         elapsed = (time.perf_counter() - start) * 1000
         results["service_list_times_ms"].append(elapsed)
     
-    # Measure full round-trip
+    # Measure full round-trip (submit → poll → execute → report → retrieve)
     print("Measuring full round-trip overhead...")
-    # First submit fresh tasks for round-trip measurement
-    for i in range(min(n_trials, 20)):
+    for i in range(min(n_trials, 30)):
         start = time.perf_counter()
         
         # Submit task
-        resp = client.post('/api/tasks/submit',
+        resp = client.post('/api/v1/tasks/submit',
             json={
-                "service_name": service_name,
-                "task_type": "test",
-                "payload": {"query": f"roundtrip test {i}"}
-            },
-            headers={"X-API-Key": api_key}
-        )
+                "service_id": service_id,
+                "description": f"Roundtrip test {i}",
+                "input": {"query": f"roundtrip test {i}"}
+            })
         data = resp.get_json()
-        tid = data.get("task_id", "")
+        tid = data["task_id"]
         
         # Poll for task
-        resp = client.get(f'/api/tasks/poll/{service_name}',
-            headers={"X-API-Key": api_key}
-        )
+        resp = client.post('/api/v1/tasks/poll',
+            json={"service_id": service_id})
         
         # Report result
-        resp = client.post(f'/api/tasks/{tid}/result',
+        resp = client.post(f'/api/v1/tasks/{tid}/result',
             json={
                 "status": "completed",
-                "result": {"output": f"roundtrip result {i}"}
-            },
-            headers={"X-API-Key": api_key}
-        )
+                "output": {"result": f"roundtrip result {i}"}
+            })
         
         # Retrieve result
-        resp = client.get(f'/api/tasks/{tid}',
-            headers={"X-API-Key": api_key}
-        )
+        resp = client.get(f'/api/v1/tasks/{tid}')
         
         elapsed = (time.perf_counter() - start) * 1000
         results["full_roundtrip_times_ms"].append(elapsed)
@@ -196,7 +188,7 @@ def measure_routing_overhead(n_trials=50):
         statistics.mean(results["task_submit_times_ms"]) +
         statistics.mean(results["task_poll_times_ms"]) +
         (statistics.mean(results["result_report_times_ms"]) if results["result_report_times_ms"] else 0) +
-        statistics.mean(results["service_list_times_ms"])
+        (statistics.mean(results["task_retrieve_times_ms"]) if results["task_retrieve_times_ms"] else 0)
     )
     
     stats["total_routing_overhead_ms"] = round(total_overhead, 2)
@@ -204,8 +196,8 @@ def measure_routing_overhead(n_trials=50):
     stats["paper_reference_ms"] = 550
     stats["note"] = (
         "Paper reports ~550ms for Rust server with network latency. "
-        "Our Python/Flask implementation with test client (no network) shows lower overhead. "
-        "In production with network latency (~200-400ms round-trip), overhead would be comparable to paper's 550ms."
+        "Our Python/Flask implementation with test client (no network) measures pure routing overhead. "
+        "In production with network latency (~200-400ms round-trip), total overhead would be comparable to paper's 550ms."
     )
     
     return results, stats
@@ -219,18 +211,16 @@ def print_results(stats):
     
     for key, s in stats.items():
         if isinstance(s, dict) and "mean_ms" in s:
-            print(f"\n{key}:")
-            print(f"  Mean: {s['mean_ms']:.2f} ms")
-            print(f"  Median: {s['median_ms']:.2f} ms")
-            print(f"  Std: {s['std_ms']:.2f} ms")
-            print(f"  Min: {s['min_ms']:.2f} ms")
-            print(f"  Max: {s['max_ms']:.2f} ms")
-            print(f"  P95: {s['p95_ms']:.2f} ms")
+            label = key.replace("_times_ms", "").replace("_", " ").title()
+            print(f"\n{label}:")
+            print(f"  Mean: {s['mean_ms']:.2f} ms  |  Median: {s['median_ms']:.2f} ms")
+            print(f"  Std:  {s['std_ms']:.2f} ms  |  P95: {s['p95_ms']:.2f} ms")
+            print(f"  Min:  {s['min_ms']:.2f} ms  |  Max: {s['max_ms']:.2f} ms")
             print(f"  N: {s['n_trials']}")
     
     print(f"\n{'='*70}")
-    print(f"Total routing overhead (submit+poll+report+list): {stats['total_routing_overhead_ms']:.2f} ms")
-    print(f"Full round-trip mean: {stats['full_roundtrip_mean_ms']:.2f} ms")
+    print(f"Total routing overhead (submit+poll+report+retrieve): {stats['total_routing_overhead_ms']:.2f} ms")
+    print(f"Full round-trip mean (4 operations): {stats['full_roundtrip_mean_ms']:.2f} ms")
     print(f"Paper reference: {stats['paper_reference_ms']} ms")
     print(f"\nNote: {stats['note']}")
     print(f"{'='*70}")
