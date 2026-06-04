@@ -1,0 +1,23 @@
+====================================================================================================
+TABLE 3: Architectural Comparison
+====================================================================================================
+
+System                Multi-Agent    Cross-Org           Tool           Data    Near-Data   Broad Client
+                          Support       Secure  Composability    Sovereignty        Exec.        Compat.
+----------------------------------------------------------------------------------------------------
+Materials Project               ✗            ✗            API              ✗            ✗           REST
+AutoGen                         ✓            ✗         Python              ✗            ✗      LangChain
+AaaS-AN                         ✓            ✗           RGPS        Partial            ✗         Custom
+MCP Servers                     ✗            ✗       JSON-RPC              ✗            ✗      MCP Hosts
+**OpenAaaS**                    ✓            ✓       Standard              ✓            ✓  MCP + Plugins
+----------------------------------------------------------------------------------------------------
+
+Key differentiator: OpenAaaS is the only system that simultaneously provides
+multi-agent orchestration, cross-organizational security, and near-data execution.
+
+Notes:
+- Materials Project: Centralized data warehouse with REST API. Single-agent, data-centralized.
+- AutoGen: Multi-agent conversation framework. Agents are Python objects in same runtime.
+- AaaS-AN: Service-oriented agent paradigm with RGPS standard. Primarily intra-organizational.
+- MCP Servers: Tool-calling protocol (JSON-RPC). Not an agent-network architecture.
+- OpenAaaS: Hierarchical AaaS with near-data execution and data sovereignty.

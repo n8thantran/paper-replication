@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Materials Project",
+    "multi_agent": false,
+    "cross_org_secure": false,
+    "tool_composability": "API",
+    "data_sovereignty": false,
+    "near_data_exec": false,
+    "broad_client_compat": "REST"
+  },
+  {
+    "name": "AutoGen",
+    "multi_agent": true,
+    "cross_org_secure": false,
+    "tool_composability": "Python",
+    "data_sovereignty": false,
+    "near_data_exec": false,
+    "broad_client_compat": "LangChain"
+  },
+  {
+    "name": "AaaS-AN",
+    "multi_agent": true,
+    "cross_org_secure": false,
+    "tool_composability": "RGPS",
+    "data_sovereignty": "Partial",
+    "near_data_exec": false,
+    "broad_client_compat": "Custom"
+  },
+  {
+    "name": "MCP Servers",
+    "multi_agent": false,
+    "cross_org_secure": false,
+    "tool_composability": "JSON-RPC",
+    "data_sovereignty": false,
+    "near_data_exec": false,
+    "broad_client_compat": "MCP Hosts"
+  },
+  {
+    "name": "OpenAaaS",
+    "multi_agent": true,
+    "cross_org_secure": true,
+    "tool_composability": "Standard",
+    "data_sovereignty": true,
+    "near_data_exec": true,
+    "broad_client_compat": "MCP + Plugins"
+  }
+]
