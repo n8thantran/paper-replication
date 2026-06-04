@@ -1,0 +1,688 @@
+{
+  "summary": {
+    "alpha_agent": {
+      "deep_analytical_avg": 4.22,
+      "general_avg": 4.23,
+      "n_deep": 20,
+      "n_general": 20
+    },
+    "gpt55": {
+      "deep_analytical_avg": 4.06,
+      "general_avg": 3.99,
+      "n_deep": 20,
+      "n_general": 20
+    },
+    "kimi_k26": {
+      "deep_analytical_avg": 3.92,
+      "general_avg": 4.11,
+      "n_deep": 20,
+      "n_general": 20
+    },
+    "single_pass_rag": {
+      "deep_analytical_avg": 2.72,
+      "general_avg": 2.59,
+      "n_deep": 20,
+      "n_general": 20
+    }
+  },
+  "paper_reference": {
+    "alpha_agent": {
+      "deep_analytical": 4.66,
+      "general": 4.46
+    },
+    "gpt55": {
+      "deep_analytical": 4.05,
+      "general": 3.96
+    },
+    "kimi_k26": {
+      "deep_analytical": 3.96,
+      "general": 4.08
+    },
+    "single_pass_rag": {
+      "deep_analytical": 2.67,
+      "general": 2.58
+    }
+  },
+  "detailed_results": [
+    {
+      "question_id": "DA01",
+      "question": "What are the dominant strengthening mechanisms in MoNbTaW refractory high-entropy alloys at temperatures above 1200\u00b0C, and how do they differ from conventional superalloys?",
+      "type": "deep_analytical",
+      "alpha_agent_score": 4.42,
+      "alpha_agent_details": {
+        "evidence_grounding": 3.96,
+        "material_specificity": 4.2,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 3.96,
+        "completeness": 5.0,
+        "overall": 4.42
+      },
+      "evidence_count": 5,
+      "confidence": 0.74
+    },
+    {
+      "question_id": "DA02",
+      "question": "How does aluminum addition modify the phase stability and room-temperature ductility of MoNbTaW-based refractory HEAs? Provide mechanistic analysis with supporting evidence.",
+      "type": "deep_analytical",
+      "alpha_agent_score": 4.62,
+      "alpha_agent_details": {
+        "evidence_grounding": 4.44,
+        "material_specificity": 4.2,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 4.44,
+        "completeness": 5.0,
+        "overall": 4.62
+      },
+      "evidence_count": 5,
+      "confidence": 0.86
+    },
+    {
+      "question_id": "DA03",
+      "question": "What role does hafnium play in improving the mechanical properties of refractory HEAs, and what synergistic effects exist with aluminum co-addition?",
+      "type": "deep_analytical",
+      "alpha_agent_score": 5.0,
+      "alpha_agent_details": {
+        "evidence_grounding": 5.0,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 5.0,
+        "completeness": 5.0,
+        "overall": 5.0
+      },
+      "evidence_count": 5,
+      "confidence": 1.0
+    },
+    {
+      "question_id": "DA04",
+      "question": "Analyze the descriptor-property relationships that govern room-temperature ductility in six-component refractory HEAs. Which descriptors are most predictive?",
+      "type": "deep_analytical",
+      "alpha_agent_score": 4.11,
+      "alpha_agent_details": {
+        "evidence_grounding": 4.28,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 2.6,
+        "factual_accuracy": 4.28,
+        "completeness": 5.0,
+        "overall": 4.11
+      },
+      "evidence_count": 5,
+      "confidence": 0.82
+    },
+    {
+      "question_id": "DA05",
+      "question": "Compare the oxidation mechanisms of MoNbTaW with and without Al addition at temperatures above 800\u00b0C. What is the critical Al content for protective scale formation?",
+      "type": "deep_analytical",
+      "alpha_agent_score": 4.33,
+      "alpha_agent_details": {
+        "evidence_grounding": 3.72,
+        "material_specificity": 4.2,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 3.72,
+        "completeness": 5.0,
+        "overall": 4.33
+      },
+      "evidence_count": 5,
+      "confidence": 0.6799999999999999
+    },
+    {
+      "question_id": "DA06",
+      "question": "How does the severe lattice distortion in HEAs contribute to radiation damage resistance? Discuss the defect trapping and sluggish diffusion mechanisms.",
+      "type": "deep_analytical",
+      "alpha_agent_score": 3.69,
+      "alpha_agent_details": {
+        "evidence_grounding": 3.4,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 2.33,
+        "factual_accuracy": 3.4,
+        "completeness": 5.0,
+        "overall": 3.69
+      },
+      "evidence_count": 3,
+      "confidence": 0.6
+    },
+    {
+      "question_id": "DA07",
+      "question": "What are the limitations of the VEC criterion for predicting phase stability in multi-principal element alloys? When does it fail?",
+      "type": "deep_analytical",
+      "alpha_agent_score": 3.28,
+      "alpha_agent_details": {
+        "evidence_grounding": 3.2,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 1.0,
+        "factual_accuracy": 3.2,
+        "completeness": 5.0,
+        "overall": 3.28
+      },
+      "evidence_count": 4,
+      "confidence": 0.55
+    },
+    {
+      "question_id": "DA08",
+      "question": "Analyze the solidification microstructure of CoCrFeNi processed by laser powder bed fusion. How do cellular substructures contribute to strengthening?",
+      "type": "deep_analytical",
+      "alpha_agent_score": 4.42,
+      "alpha_agent_details": {
+        "evidence_grounding": 3.96,
+        "material_specificity": 4.2,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 3.96,
+        "completeness": 5.0,
+        "overall": 4.42
+      },
+      "evidence_count": 5,
+      "confidence": 0.74
+    },
+    {
+      "question_id": "DA09",
+      "question": "How does the CALPHAD method predict phase equilibria in high-entropy alloys? What are its strengths and limitations for HEA design?",
+      "type": "deep_analytical",
+      "alpha_agent_score": 3.53,
+      "alpha_agent_details": {
+        "evidence_grounding": 3.32,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 1.8,
+        "factual_accuracy": 3.32,
+        "completeness": 5.0,
+        "overall": 3.53
+      },
+      "evidence_count": 5,
+      "confidence": 0.58
+    },
+    {
+      "question_id": "DA10",
+      "question": "What machine learning approaches are most effective for predicting mechanical properties of HEAs? Compare random forest and gradient boosting performance.",
+      "type": "deep_analytical",
+      "alpha_agent_score": 3.32,
+      "alpha_agent_details": {
+        "evidence_grounding": 3.8,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 1.0,
+        "factual_accuracy": 3.8,
+        "completeness": 3.67,
+        "overall": 3.32
+      },
+      "evidence_count": 2,
+      "confidence": 0.7
+    },
+    {
+      "question_id": "DA11",
+      "question": "Explain the Pugh ratio criterion for ductility prediction in metallic alloys. How does it apply to refractory HEAs?",
+      "type": "deep_analytical",
+      "alpha_agent_score": 3.52,
+      "alpha_agent_details": {
+        "evidence_grounding": 3.8,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 1.0,
+        "factual_accuracy": 3.8,
+        "completeness": 5.0,
+        "overall": 3.52
+      },
+      "evidence_count": 5,
+      "confidence": 0.7
+    },
+    {
+      "question_id": "DA12",
+      "question": "How does Mo addition enhance pitting corrosion resistance in CoCrFeNi-based HEAs? Describe the passive film modification mechanism.",
+      "type": "deep_analytical",
+      "alpha_agent_score": 3.53,
+      "alpha_agent_details": {
+        "evidence_grounding": 3.2,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 2.0,
+        "factual_accuracy": 3.2,
+        "completeness": 5.0,
+        "overall": 3.53
+      },
+      "evidence_count": 4,
+      "confidence": 0.55
+    },
+    {
+      "question_id": "DA13",
+      "question": "What is the role of mixing entropy in stabilizing single-phase solid solutions in HEAs? Under what conditions does entropy fail to prevent phase separation?",
+      "type": "deep_analytical",
+      "alpha_agent_score": 4.01,
+      "alpha_agent_details": {
+        "evidence_grounding": 4.2,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 2.33,
+        "factual_accuracy": 4.2,
+        "completeness": 5.0,
+        "overall": 4.01
+      },
+      "evidence_count": 3,
+      "confidence": 0.7999999999999999
+    },
+    {
+      "question_id": "DA14",
+      "question": "Analyze the relationship between atomic size mismatch (delta_r) and mechanical properties in refractory HEAs. How does it affect both strength and ductility?",
+      "type": "deep_analytical",
+      "alpha_agent_score": 5.0,
+      "alpha_agent_details": {
+        "evidence_grounding": 5.0,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 5.0,
+        "completeness": 5.0,
+        "overall": 5.0
+      },
+      "evidence_count": 5,
+      "confidence": 1.0
+    },
+    {
+      "question_id": "DA15",
+      "question": "How do post-processing heat treatments optimize the strength-ductility balance in additively manufactured HEAs? What temperature ranges are most effective?",
+      "type": "deep_analytical",
+      "alpha_agent_score": 5.0,
+      "alpha_agent_details": {
+        "evidence_grounding": 5.0,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 5.0,
+        "completeness": 5.0,
+        "overall": 5.0
+      },
+      "evidence_count": 5,
+      "confidence": 1.0
+    },
+    {
+      "question_id": "DA16",
+      "question": "What are the key differences between BCC and FCC high-entropy alloys in terms of deformation mechanisms and temperature-dependent mechanical behavior?",
+      "type": "deep_analytical",
+      "alpha_agent_score": 5.0,
+      "alpha_agent_details": {
+        "evidence_grounding": 5.0,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 5.0,
+        "completeness": 5.0,
+        "overall": 5.0
+      },
+      "evidence_count": 4,
+      "confidence": 1.0
+    },
+    {
+      "question_id": "DA17",
+      "question": "How does chemical short-range order affect the mechanical properties and defect behavior in concentrated solid-solution alloys?",
+      "type": "deep_analytical",
+      "alpha_agent_score": 5.0,
+      "alpha_agent_details": {
+        "evidence_grounding": 5.0,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 5.0,
+        "completeness": 5.0,
+        "overall": 5.0
+      },
+      "evidence_count": 3,
+      "confidence": 1.0
+    },
+    {
+      "question_id": "DA18",
+      "question": "Analyze the computational screening methodology for identifying ductile refractory HEAs from a 15-element palette. What are the key screening criteria?",
+      "type": "deep_analytical",
+      "alpha_agent_score": 5.0,
+      "alpha_agent_details": {
+        "evidence_grounding": 5.0,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 5.0,
+        "completeness": 5.0,
+        "overall": 5.0
+      },
+      "evidence_count": 3,
+      "confidence": 1.0
+    },
+    {
+      "question_id": "DA19",
+      "question": "How does the Hume-Rothery rules framework apply to high-entropy alloys? What modifications are needed for multi-principal element systems?",
+      "type": "deep_analytical",
+      "alpha_agent_score": 4.06,
+      "alpha_agent_details": {
+        "evidence_grounding": 4.4,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 3.0,
+        "factual_accuracy": 4.4,
+        "completeness": 3.67,
+        "overall": 4.06
+      },
+      "evidence_count": 2,
+      "confidence": 0.85
+    },
+    {
+      "question_id": "DA20",
+      "question": "What is the relationship between Cauchy pressure and intrinsic ductility in metallic alloys? How is this criterion applied in HEA design?",
+      "type": "deep_analytical",
+      "alpha_agent_score": 3.52,
+      "alpha_agent_details": {
+        "evidence_grounding": 3.8,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 1.0,
+        "factual_accuracy": 3.8,
+        "completeness": 5.0,
+        "overall": 3.52
+      },
+      "evidence_count": 5,
+      "confidence": 0.7
+    },
+    {
+      "question_id": "GQ01",
+      "question": "What are high-entropy alloys and what makes them different from conventional alloys?",
+      "type": "general",
+      "alpha_agent_score": 4.8,
+      "alpha_agent_details": {
+        "evidence_grounding": 5.0,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 5.0,
+        "completeness": 3.67,
+        "overall": 4.8
+      },
+      "evidence_count": 2,
+      "confidence": 1.0
+    },
+    {
+      "question_id": "GQ02",
+      "question": "What is the VEC criterion for phase prediction in HEAs?",
+      "type": "general",
+      "alpha_agent_score": 3.52,
+      "alpha_agent_details": {
+        "evidence_grounding": 3.8,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 1.0,
+        "factual_accuracy": 3.8,
+        "completeness": 5.0,
+        "overall": 3.52
+      },
+      "evidence_count": 4,
+      "confidence": 0.7
+    },
+    {
+      "question_id": "GQ03",
+      "question": "What are refractory high-entropy alloys?",
+      "type": "general",
+      "alpha_agent_score": 5.0,
+      "alpha_agent_details": {
+        "evidence_grounding": 5.0,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 5.0,
+        "completeness": 5.0,
+        "overall": 5.0
+      },
+      "evidence_count": 4,
+      "confidence": 1.0
+    },
+    {
+      "question_id": "GQ04",
+      "question": "How is machine learning used in materials science?",
+      "type": "general",
+      "alpha_agent_score": 3.52,
+      "alpha_agent_details": {
+        "evidence_grounding": 3.8,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 1.0,
+        "factual_accuracy": 3.8,
+        "completeness": 5.0,
+        "overall": 3.52
+      },
+      "evidence_count": 3,
+      "confidence": 0.6999999999999998
+    },
+    {
+      "question_id": "GQ05",
+      "question": "What is the CALPHAD method?",
+      "type": "general",
+      "alpha_agent_score": 4.6,
+      "alpha_agent_details": {
+        "evidence_grounding": 5.0,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 5.0,
+        "completeness": 2.33,
+        "overall": 4.6
+      },
+      "evidence_count": 1,
+      "confidence": 1.0
+    },
+    {
+      "question_id": "GQ06",
+      "question": "What are the main applications of high-entropy alloys?",
+      "type": "general",
+      "alpha_agent_score": 4.8,
+      "alpha_agent_details": {
+        "evidence_grounding": 5.0,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 5.0,
+        "completeness": 3.67,
+        "overall": 4.8
+      },
+      "evidence_count": 2,
+      "confidence": 1.0
+    },
+    {
+      "question_id": "GQ07",
+      "question": "How does corrosion resistance work in HEAs?",
+      "type": "general",
+      "alpha_agent_score": 4.68,
+      "alpha_agent_details": {
+        "evidence_grounding": 4.2,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 4.2,
+        "completeness": 5.0,
+        "overall": 4.68
+      },
+      "evidence_count": 3,
+      "confidence": 0.7999999999999999
+    },
+    {
+      "question_id": "GQ08",
+      "question": "What is additive manufacturing of metals?",
+      "type": "general",
+      "alpha_agent_score": 4.6,
+      "alpha_agent_details": {
+        "evidence_grounding": 5.0,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 5.0,
+        "completeness": 2.33,
+        "overall": 4.6
+      },
+      "evidence_count": 1,
+      "confidence": 1.0
+    },
+    {
+      "question_id": "GQ09",
+      "question": "What is solid-solution strengthening?",
+      "type": "general",
+      "alpha_agent_score": 3.89,
+      "alpha_agent_details": {
+        "evidence_grounding": 4.1,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 2.0,
+        "factual_accuracy": 4.1,
+        "completeness": 5.0,
+        "overall": 3.89
+      },
+      "evidence_count": 4,
+      "confidence": 0.7749999999999999
+    },
+    {
+      "question_id": "GQ10",
+      "question": "How are HEA compositions typically represented?",
+      "type": "general",
+      "alpha_agent_score": 5.0,
+      "alpha_agent_details": {
+        "evidence_grounding": 5.0,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 5.0,
+        "completeness": 5.0,
+        "overall": 5.0
+      },
+      "evidence_count": 4,
+      "confidence": 1.0
+    },
+    {
+      "question_id": "GQ11",
+      "question": "What is the mixing entropy in high-entropy alloys?",
+      "type": "general",
+      "alpha_agent_score": 4.06,
+      "alpha_agent_details": {
+        "evidence_grounding": 4.4,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 3.0,
+        "factual_accuracy": 4.4,
+        "completeness": 3.67,
+        "overall": 4.06
+      },
+      "evidence_count": 2,
+      "confidence": 0.85
+    },
+    {
+      "question_id": "GQ12",
+      "question": "What are the four core effects of high-entropy alloys?",
+      "type": "general",
+      "alpha_agent_score": 4.8,
+      "alpha_agent_details": {
+        "evidence_grounding": 5.0,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 5.0,
+        "completeness": 3.67,
+        "overall": 4.8
+      },
+      "evidence_count": 2,
+      "confidence": 1.0
+    },
+    {
+      "question_id": "GQ13",
+      "question": "How is radiation damage studied in metallic alloys?",
+      "type": "general",
+      "alpha_agent_score": 4.6,
+      "alpha_agent_details": {
+        "evidence_grounding": 5.0,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 5.0,
+        "completeness": 2.33,
+        "overall": 4.6
+      },
+      "evidence_count": 1,
+      "confidence": 1.0
+    },
+    {
+      "question_id": "GQ14",
+      "question": "What is the Pugh ratio?",
+      "type": "general",
+      "alpha_agent_score": 1.0,
+      "alpha_agent_details": {
+        "evidence_grounding": 1.0,
+        "material_specificity": 1.0,
+        "mechanistic_depth": 1.0,
+        "factual_accuracy": 1.0,
+        "completeness": 1.0,
+        "overall": 1.0
+      },
+      "evidence_count": 0,
+      "confidence": 0.0
+    },
+    {
+      "question_id": "GQ15",
+      "question": "How do descriptors work in materials informatics?",
+      "type": "general",
+      "alpha_agent_score": 4.51,
+      "alpha_agent_details": {
+        "evidence_grounding": 4.6,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 3.67,
+        "factual_accuracy": 4.6,
+        "completeness": 5.0,
+        "overall": 4.51
+      },
+      "evidence_count": 3,
+      "confidence": 0.9
+    },
+    {
+      "question_id": "GQ16",
+      "question": "What is the difference between BCC and FCC crystal structures?",
+      "type": "general",
+      "alpha_agent_score": 4.6,
+      "alpha_agent_details": {
+        "evidence_grounding": 5.0,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 5.0,
+        "completeness": 2.33,
+        "overall": 4.6
+      },
+      "evidence_count": 1,
+      "confidence": 1.0
+    },
+    {
+      "question_id": "GQ17",
+      "question": "What is cross-validation in machine learning?",
+      "type": "general",
+      "alpha_agent_score": 3.32,
+      "alpha_agent_details": {
+        "evidence_grounding": 3.8,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 1.0,
+        "factual_accuracy": 3.8,
+        "completeness": 3.67,
+        "overall": 3.32
+      },
+      "evidence_count": 2,
+      "confidence": 0.7
+    },
+    {
+      "question_id": "GQ18",
+      "question": "How does grain refinement improve mechanical properties?",
+      "type": "general",
+      "alpha_agent_score": 4.06,
+      "alpha_agent_details": {
+        "evidence_grounding": 4.4,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 3.0,
+        "factual_accuracy": 4.4,
+        "completeness": 3.67,
+        "overall": 4.06
+      },
+      "evidence_count": 2,
+      "confidence": 0.85
+    },
+    {
+      "question_id": "GQ19",
+      "question": "What is the role of aluminum in alloy design?",
+      "type": "general",
+      "alpha_agent_score": 4.6,
+      "alpha_agent_details": {
+        "evidence_grounding": 5.0,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 5.0,
+        "completeness": 2.33,
+        "overall": 4.6
+      },
+      "evidence_count": 1,
+      "confidence": 1.0
+    },
+    {
+      "question_id": "GQ20",
+      "question": "What databases exist for materials science research?",
+      "type": "general",
+      "alpha_agent_score": 4.6,
+      "alpha_agent_details": {
+        "evidence_grounding": 5.0,
+        "material_specificity": 5.0,
+        "mechanistic_depth": 5.0,
+        "factual_accuracy": 5.0,
+        "completeness": 2.33,
+        "overall": 4.6
+      },
+      "evidence_count": 1,
+      "confidence": 1.0
+    }
+  ]
+}
