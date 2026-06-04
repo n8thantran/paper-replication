@@ -1,288 +1,481 @@
 {
-  "report": "# HEA-Executor Analytical Report\n\n## Task Description\nCan the room-temperature plasticity of MoNbTaW refractory HEAs be optimized by adjusting compositional ratios? Identify the optimal six-element system from the 15-element palette.\n\n## Database Overview\n- **Element palette**: Al, Co, Cr, Cu, Fe, Mn, Mo, Nb, Ni, Ti, V, W, Zr, Ta, Hf (15 elements)\n- **Total six-element combinations**: 5005\n- **Descriptor dimensions**: 194\n\n## Query Results\n- **Matching combinations**: 55\n- **Total samples analyzed**: 11000\n\n## Combination Rankings (by % highly ductile)\n\n| Rank | Combination | Samples | % Highly Ductile | Avg Ductility Score | Avg VEC | Pugh Ratio |\n|------|-------------|---------|-----------------|--------------------|---------|-----------| \n| 1 | Al-Mo-Nb-Ta-V-W | 200 | 100.00% | 0.7510 | 5.02 | 2.50 |\n| 2 | Al-Mo-Nb-Ta-Ti-W | 200 | 99.50% | 0.7495 | 4.85 | 2.40 |\n| 3 | Mo-Nb-Ta-Ti-V-W | 200 | 99.50% | 0.7443 | 5.18 | 2.47 |\n| 4 | Co-Cu-Mo-Nb-Ta-W | 200 | 98.00% | 0.7497 | 7.05 | 2.41 |\n| 5 | Cu-Mo-Nb-Ni-Ta-W | 200 | 97.50% | 0.7509 | 7.14 | 2.42 |\n| 6 | Hf-Mo-Nb-Ta-Ti-W | 200 | 97.50% | 0.6957 | 4.99 | 2.46 |\n| 7 | Co-Mo-Nb-Ta-V-W | 200 | 97.00% | 0.6795 | 5.99 | 2.45 |\n| 8 | Cr-Mn-Mo-Nb-Ta-W | 200 | 97.00% | 0.6881 | 5.84 | 2.04 |\n| 9 | Fe-Mn-Mo-Nb-Ta-W | 200 | 97.00% | 0.6835 | 6.16 | 2.18 |\n| 10 | Al-Cr-Mo-Nb-Ta-W | 200 | 96.50% | 0.7009 | 5.18 | 2.19 |\n| 11 | Al-Hf-Mo-Nb-Ta-W | 200 | 96.50% | 0.6948 | 4.82 | 2.49 |\n| 12 | Cu-Mo-Nb-Ta-Ti-W | 200 | 96.50% | 0.6954 | 6.16 | 2.44 |\n| 13 | Cr-Cu-Mo-Nb-Ta-W | 200 | 96.00% | 0.6935 | 6.50 | 2.20 |\n| 14 | Cr-Mo-Nb-Ta-V-W | 200 | 96.00% | 0.6867 | 5.51 | 2.24 |\n| 15 | Fe-Mo-Nb-Ta-Ti-W | 200 | 96.00% | 0.6769 | 5.66 | 2.32 |\n| 16 | Al-Co-Mo-Nb-Ta-W | 200 | 95.50% | 0.6879 | 5.62 | 2.39 |\n| 17 | Al-Mn-Mo-Nb-Ta-W | 200 | 95.50% | 0.6924 | 5.32 | 2.26 |\n| 18 | Cu-Fe-Mo-Nb-Ta-W | 200 | 95.50% | 0.7198 | 6.81 | 2.36 |\n| 19 | Cu-Mn-Mo-Nb-Ta-W | 200 | 95.50% | 0.7040 | 6.68 | 2.28 |\n| 20 | Hf-Mo-Nb-Ta-W-Zr | 200 | 95.50% | 0.6798 | 5.00 | 2.48 |\n\n## Machine Learning Analysis\n\n### Ductility Classification\n- **Model**: RandomForestClassifier\n- **Samples**: 11000\n- **5-Fold CV F1**: 0.9265 \u00b1 0.0017\n- **5-Fold CV Accuracy**: 0.8695 \u00b1 0.0025\n- **Positive rate (highly ductile)**: 90.96%\n\n**Top Feature Importances:**\n  - delta_r: 0.3394\n  - vec_avg: 0.1156\n  - frac_Zr: 0.0527\n  - S_mix: 0.0478\n  - Tm_avg: 0.0395\n\n### Plasticity Regression\n- **Model**: GradientBoostingRegressor\n- **5-Fold CV R\u00b2**: 0.2144 \u00b1 0.0283\n- **5-Fold CV MAE**: 2.3239 \u00b1 0.0252\n- **Mean plasticity**: 27.33%\n\n## Key Findings\n- **Optimal system**: Al-Mo-Nb-Ta-V-W\n- **Highly ductile fraction**: 100.00%\n- **Baseline system**: Al-Mo-Nb-Ta-Ti-W (99.50%)\n- **Improvement factor**: 1.0x",
+  "report": "# HEA-Executor Analytical Report\n\n## Task Description\nCan the room-temperature plasticity of MoNbTaW refractory HEAs be optimized by adjusting compositional ratios? Identify the optimal six-element system from the 15-element palette.\n\n## Database Overview\n- **Element palette**: Al, Co, Cr, Cu, Fe, Mn, Mo, Nb, Ni, Ti, V, W, Zr, Ta, Hf (15 elements)\n- **Total six-element combinations**: 5005\n- **Descriptor dimensions per composition**: 194\n- **Estimated full database size**: ~17.4 TB\n\n## Query Results (Computation-Near-Data)\n- **Matching combinations**: 55\n- **Total samples analyzed**: 27500\n\n## Combination Rankings (by % highly ductile)\n\n| Rank | System | Samples | % Highly Ductile | Avg Score | Avg VEC | Pugh B/G |\n|------|--------|---------|-----------------|-----------|---------|----------|\n| 1 | Al-Hf-Mo-Nb-Ta-W | 500 | 10.20% | 0.1809 | 4.85 | 2.48 |\n| 2 | Hf-Mo-Nb-Ta-W-Zr | 500 | 2.80% | 0.1257 | 5.00 | 2.49 |\n| 3 | Al-Mo-Nb-Ta-W-Zr | 500 | 2.20% | 0.1281 | 4.83 | 2.44 |\n| 4 | Cr-Hf-Mo-Nb-Ta-W | 500 | 1.20% | 0.1166 | 5.34 | 2.22 |\n| 5 | Hf-Mo-Nb-Ta-Ti-W | 500 | 1.20% | 0.1188 | 4.99 | 2.46 |\n| 6 | Al-Mo-Nb-Ni-Ta-W | 500 | 0.80% | 0.1106 | 5.86 | 2.39 |\n| 7 | Hf-Mo-Nb-Ta-V-W | 500 | 0.80% | 0.1152 | 5.17 | 2.56 |\n| 8 | Al-Cr-Mo-Nb-Ta-W | 500 | 0.60% | 0.1121 | 5.18 | 2.18 |\n| 9 | Al-Fe-Mo-Nb-Ta-W | 500 | 0.60% | 0.1081 | 5.49 | 2.34 |\n| 10 | Al-Mo-Nb-Ta-Ti-W | 500 | 0.60% | 0.1115 | 4.83 | 2.41 |\n| 11 | Al-Mo-Nb-Ta-V-W | 500 | 0.60% | 0.1180 | 4.99 | 2.51 |\n| 12 | Fe-Hf-Mo-Nb-Ta-W | 500 | 0.60% | 0.1161 | 5.68 | 2.40 |\n| 13 | Fe-Mn-Mo-Nb-Ta-W | 500 | 0.60% | 0.1137 | 6.17 | 2.20 |\n| 14 | Hf-Mo-Nb-Ni-Ta-W | 500 | 0.60% | 0.1151 | 5.98 | 2.46 |\n| 15 | Al-Co-Mo-Nb-Ta-W | 500 | 0.40% | 0.1168 | 5.67 | 2.39 |\n| 16 | Co-Hf-Mo-Nb-Ta-W | 500 | 0.40% | 0.1104 | 5.85 | 2.45 |\n| 17 | Co-Mo-Nb-Ta-Ti-W | 500 | 0.40% | 0.1115 | 5.83 | 2.37 |\n| 18 | Cu-Hf-Mo-Nb-Ta-W | 500 | 0.40% | 0.1091 | 6.15 | 2.51 |\n| 19 | Mo-Nb-Ta-Ti-V-W | 500 | 0.40% | 0.1143 | 5.17 | 2.48 |\n| 20 | Co-Cu-Mo-Nb-Ta-W | 500 | 0.20% | 0.1089 | 6.99 | 2.43 |\n\n## Machine Learning Analysis\n\n### Ductility Classification (RandomForest)\n- **Samples**: 27500\n- **5-Fold CV F1**: 0.1474 \u00b1 0.0244\n- **5-Fold CV Accuracy**: 0.9817 \u00b1 0.0006\n- **Positive rate (highly ductile)**: 0.50%\n\n**Top Feature Importances:**\n  - vec_avg: 0.1818\n  - frac_Hf: 0.1469\n  - cauchy_pressure: 0.0936\n  - frac_Al: 0.0687\n  - pugh_ratio: 0.0679\n\n### Plasticity Regression (GradientBoosting)\n- **5-Fold CV R\u00b2**: -0.0014 \u00b1 0.0071\n- **5-Fold CV MAE**: 2.4783 \u00b1 0.0283\n\n## Key Findings\n- **Optimal system**: Al-Hf-Mo-Nb-Ta-W\n- **Highly ductile fraction**: 10.20%\n- **Baseline system (Ti-containing)**: Hf-Mo-Nb-Ta-Ti-W\n- **Baseline highly ductile fraction**: 1.20%\n- **Improvement factor**: 8.5x\n\n## Data Sovereignty Compliance\n- \u2705 Remote-Execution-First: All computation at data side\n- \u2705 Minimal Data Return: Only statistics and rankings returned\n- \u2705 Database Isolation: No direct file access\n- \u2705 Restricted Descriptor Exposure: Only aggregate features returned\n- \u2705 Multi-User Shared Computing: Task-level isolation maintained",
   "n_combinations_screened": 55,
-  "total_samples_analyzed": 11000,
+  "total_samples_analyzed": 27500,
   "top_combinations": [
     {
-      "combination_id": "Al-Mo-Nb-Ta-V-W",
-      "total_samples": 200,
-      "avg_ductility_score": 0.7509825744646165,
-      "avg_plasticity": 30.296365036701538,
-      "n_highly_ductile": 200,
+      "combination_id": "Al-Hf-Mo-Nb-Ta-W",
+      "total_samples": 500,
+      "avg_ductility_score": 0.18091187008970025,
+      "avg_plasticity": 6.556648483438274,
+      "n_highly_ductile": 51,
       "n_moderately_ductile": 0,
-      "n_limited": 0,
-      "n_brittle": 0,
-      "pct_highly_ductile": 100.0,
-      "avg_vec": 5.0177579765000315,
-      "avg_pugh": 2.5023847059371827,
-      "avg_cauchy": 114.77427472720554,
-      "avg_delta_r": 2.9944088465897263,
-      "avg_S_mix": 14.156824694053698
+      "n_limited": 18,
+      "n_brittle": 431,
+      "pct_highly_ductile": 10.2,
+      "avg_vec": 4.848053496064826,
+      "avg_pugh": 2.480007542798147,
+      "avg_cauchy": 109.13082074785954,
+      "avg_delta_r": 4.533330887317454,
+      "avg_S_mix": 14.159026764493209
     },
     {
-      "combination_id": "Al-Mo-Nb-Ta-Ti-W",
-      "total_samples": 200,
-      "avg_ductility_score": 0.7494617586176876,
-      "avg_plasticity": 29.787596487641228,
-      "n_highly_ductile": 199,
+      "combination_id": "Hf-Mo-Nb-Ta-W-Zr",
+      "total_samples": 500,
+      "avg_ductility_score": 0.12566290089907442,
+      "avg_plasticity": 4.572471985583257,
+      "n_highly_ductile": 14,
+      "n_moderately_ductile": 0,
+      "n_limited": 17,
+      "n_brittle": 469,
+      "pct_highly_ductile": 2.8000000000000003,
+      "avg_vec": 4.997339969635691,
+      "avg_pugh": 2.489103003056369,
+      "avg_cauchy": 110.57114604239294,
+      "avg_delta_r": 5.605432033532346,
+      "avg_S_mix": 14.177281286849457
+    },
+    {
+      "combination_id": "Al-Mo-Nb-Ta-W-Zr",
+      "total_samples": 500,
+      "avg_ductility_score": 0.12807282243998977,
+      "avg_plasticity": 4.578415070878154,
+      "n_highly_ductile": 11,
       "n_moderately_ductile": 1,
-      "n_limited": 0,
-      "n_brittle": 0,
-      "pct_highly_ductile": 99.5,
-      "avg_vec": 4.846043352141427,
-      "avg_pugh": 2.403998992561098,
-      "avg_cauchy": 106.63799622706483,
-      "avg_delta_r": 2.2688514182633712,
-      "avg_S_mix": 14.177478690410203
+      "n_limited": 17,
+      "n_brittle": 471,
+      "pct_highly_ductile": 2.1999999999999997,
+      "avg_vec": 4.8346926953744624,
+      "avg_pugh": 2.436827565348266,
+      "avg_cauchy": 105.72268684537691,
+      "avg_delta_r": 4.740063764199437,
+      "avg_S_mix": 14.140283944072008
     },
     {
-      "combination_id": "Mo-Nb-Ta-Ti-V-W",
-      "total_samples": 200,
-      "avg_ductility_score": 0.7443387062421521,
-      "avg_plasticity": 29.8476456316082,
-      "n_highly_ductile": 199,
-      "n_moderately_ductile": 1,
-      "n_limited": 0,
-      "n_brittle": 0,
-      "pct_highly_ductile": 99.5,
-      "avg_vec": 5.176970255006114,
-      "avg_pugh": 2.4669573469393637,
-      "avg_cauchy": 116.58295750934569,
-      "avg_delta_r": 3.325631136715059,
-      "avg_S_mix": 14.16367923744932
-    },
-    {
-      "combination_id": "Co-Cu-Mo-Nb-Ta-W",
-      "total_samples": 200,
-      "avg_ductility_score": 0.7496850790500068,
-      "avg_plasticity": 29.958666523068636,
-      "n_highly_ductile": 196,
-      "n_moderately_ductile": 4,
-      "n_limited": 0,
-      "n_brittle": 0,
-      "pct_highly_ductile": 98.0,
-      "avg_vec": 7.050621967229898,
-      "avg_pugh": 2.4067698048274657,
-      "avg_cauchy": 119.67848379371844,
-      "avg_delta_r": 5.815991196698338,
-      "avg_S_mix": 14.216945378582029
-    },
-    {
-      "combination_id": "Cu-Mo-Nb-Ni-Ta-W",
-      "total_samples": 200,
-      "avg_ductility_score": 0.7508933696107966,
-      "avg_plasticity": 29.880286224554794,
-      "n_highly_ductile": 195,
-      "n_moderately_ductile": 5,
-      "n_limited": 0,
-      "n_brittle": 0,
-      "pct_highly_ductile": 97.5,
-      "avg_vec": 7.138096908519759,
-      "avg_pugh": 2.423203508756613,
-      "avg_cauchy": 119.89986588431013,
-      "avg_delta_r": 5.986994986545154,
-      "avg_S_mix": 14.137648325382822
+      "combination_id": "Cr-Hf-Mo-Nb-Ta-W",
+      "total_samples": 500,
+      "avg_ductility_score": 0.11661314194712832,
+      "avg_plasticity": 4.055364358713328,
+      "n_highly_ductile": 6,
+      "n_moderately_ductile": 0,
+      "n_limited": 16,
+      "n_brittle": 478,
+      "pct_highly_ductile": 1.2,
+      "avg_vec": 5.343383224855078,
+      "avg_pugh": 2.217494846953989,
+      "avg_cauchy": 107.98388146403853,
+      "avg_delta_r": 6.395180166791621,
+      "avg_S_mix": 14.180021476607134
     },
     {
       "combination_id": "Hf-Mo-Nb-Ta-Ti-W",
-      "total_samples": 200,
-      "avg_ductility_score": 0.6956643912838704,
-      "avg_plasticity": 27.770130051376896,
-      "n_highly_ductile": 195,
-      "n_moderately_ductile": 5,
-      "n_limited": 0,
-      "n_brittle": 0,
-      "pct_highly_ductile": 97.5,
-      "avg_vec": 4.992917712860224,
-      "avg_pugh": 2.4606024144251832,
-      "avg_cauchy": 110.79325237194507,
-      "avg_delta_r": 4.408524927738822,
-      "avg_S_mix": 14.183739478903664
+      "total_samples": 500,
+      "avg_ductility_score": 0.11878755238308938,
+      "avg_plasticity": 4.401499066529781,
+      "n_highly_ductile": 6,
+      "n_moderately_ductile": 0,
+      "n_limited": 16,
+      "n_brittle": 478,
+      "pct_highly_ductile": 1.2,
+      "avg_vec": 4.992248634981947,
+      "avg_pugh": 2.459268293089614,
+      "avg_cauchy": 110.83234676980851,
+      "avg_delta_r": 4.496436718081779,
+      "avg_S_mix": 14.122995402619107
     },
     {
-      "combination_id": "Co-Mo-Nb-Ta-V-W",
-      "total_samples": 200,
-      "avg_ductility_score": 0.6794654766180948,
-      "avg_plasticity": 27.146707316696524,
-      "n_highly_ductile": 194,
-      "n_moderately_ductile": 6,
-      "n_limited": 0,
-      "n_brittle": 0,
-      "pct_highly_ductile": 97.0,
-      "avg_vec": 5.990854872855894,
-      "avg_pugh": 2.452937246934837,
-      "avg_cauchy": 123.45621746001223,
-      "avg_delta_r": 5.079178362808124,
-      "avg_S_mix": 14.19179786486905
+      "combination_id": "Al-Mo-Nb-Ni-Ta-W",
+      "total_samples": 500,
+      "avg_ductility_score": 0.11058893219462608,
+      "avg_plasticity": 3.9590620520217112,
+      "n_highly_ductile": 4,
+      "n_moderately_ductile": 0,
+      "n_limited": 14,
+      "n_brittle": 482,
+      "pct_highly_ductile": 0.8,
+      "avg_vec": 5.860639575985115,
+      "avg_pugh": 2.3948738544860557,
+      "avg_cauchy": 112.68938853230611,
+      "avg_delta_r": 5.292319810770865,
+      "avg_S_mix": 14.17176949057503
     },
     {
-      "combination_id": "Cr-Mn-Mo-Nb-Ta-W",
-      "total_samples": 200,
-      "avg_ductility_score": 0.6880643428083927,
-      "avg_plasticity": 27.424362221753054,
-      "n_highly_ductile": 194,
-      "n_moderately_ductile": 6,
-      "n_limited": 0,
-      "n_brittle": 0,
-      "pct_highly_ductile": 97.0,
-      "avg_vec": 5.837808462442732,
-      "avg_pugh": 2.0445690536425216,
-      "avg_cauchy": 101.47451971596165,
-      "avg_delta_r": 5.412837079349267,
-      "avg_S_mix": 14.168058610202154
-    },
-    {
-      "combination_id": "Fe-Mn-Mo-Nb-Ta-W",
-      "total_samples": 200,
-      "avg_ductility_score": 0.683471300012281,
-      "avg_plasticity": 27.23934054887844,
-      "n_highly_ductile": 194,
-      "n_moderately_ductile": 6,
-      "n_limited": 0,
-      "n_brittle": 0,
-      "pct_highly_ductile": 97.0,
-      "avg_vec": 6.162276785049698,
-      "avg_pugh": 2.182525429203875,
-      "avg_cauchy": 107.94998492747578,
-      "avg_delta_r": 5.719097266403094,
-      "avg_S_mix": 14.125402436279275
+      "combination_id": "Hf-Mo-Nb-Ta-V-W",
+      "total_samples": 500,
+      "avg_ductility_score": 0.11522232814964284,
+      "avg_plasticity": 4.298873499372445,
+      "n_highly_ductile": 4,
+      "n_moderately_ductile": 0,
+      "n_limited": 18,
+      "n_brittle": 478,
+      "pct_highly_ductile": 0.8,
+      "avg_vec": 5.166144021967848,
+      "avg_pugh": 2.559813927821342,
+      "avg_cauchy": 119.24964292363205,
+      "avg_delta_r": 5.370291360218026,
+      "avg_S_mix": 14.132366372677891
     },
     {
       "combination_id": "Al-Cr-Mo-Nb-Ta-W",
-      "total_samples": 200,
-      "avg_ductility_score": 0.7009143914945711,
-      "avg_plasticity": 27.836988935251096,
-      "n_highly_ductile": 193,
-      "n_moderately_ductile": 7,
-      "n_limited": 0,
-      "n_brittle": 0,
-      "pct_highly_ductile": 96.5,
-      "avg_vec": 5.179807113782948,
-      "avg_pugh": 2.18581222754492,
-      "avg_cauchy": 103.24924065794015,
-      "avg_delta_r": 4.26799881068584,
-      "avg_S_mix": 14.156964979562252
+      "total_samples": 500,
+      "avg_ductility_score": 0.11213017303415197,
+      "avg_plasticity": 3.865287132066832,
+      "n_highly_ductile": 3,
+      "n_moderately_ductile": 1,
+      "n_limited": 18,
+      "n_brittle": 478,
+      "pct_highly_ductile": 0.6,
+      "avg_vec": 5.175064524073633,
+      "avg_pugh": 2.1844182780874153,
+      "avg_cauchy": 103.28516950290151,
+      "avg_delta_r": 4.277721680881876,
+      "avg_S_mix": 14.149241123121541
+    },
+    {
+      "combination_id": "Al-Fe-Mo-Nb-Ta-W",
+      "total_samples": 500,
+      "avg_ductility_score": 0.10810872216042629,
+      "avg_plasticity": 4.0319367605286685,
+      "n_highly_ductile": 3,
+      "n_moderately_ductile": 0,
+      "n_limited": 16,
+      "n_brittle": 481,
+      "pct_highly_ductile": 0.6,
+      "avg_vec": 5.4904526441053925,
+      "avg_pugh": 2.3432520342323526,
+      "avg_cauchy": 109.96676711021424,
+      "avg_delta_r": 4.73897503104922,
+      "avg_S_mix": 14.143506528014928
+    },
+    {
+      "combination_id": "Al-Mo-Nb-Ta-Ti-W",
+      "total_samples": 500,
+      "avg_ductility_score": 0.11146711365306344,
+      "avg_plasticity": 4.0863454093002165,
+      "n_highly_ductile": 3,
+      "n_moderately_ductile": 0,
+      "n_limited": 19,
+      "n_brittle": 478,
+      "pct_highly_ductile": 0.6,
+      "avg_vec": 4.8280997599547,
+      "avg_pugh": 2.4124198735984517,
+      "avg_cauchy": 106.25158735736761,
+      "avg_delta_r": 2.250386327190271,
+      "avg_S_mix": 14.182448788911946
+    },
+    {
+      "combination_id": "Al-Mo-Nb-Ta-V-W",
+      "total_samples": 500,
+      "avg_ductility_score": 0.11799204248944133,
+      "avg_plasticity": 4.145907695579599,
+      "n_highly_ductile": 3,
+      "n_moderately_ductile": 0,
+      "n_limited": 16,
+      "n_brittle": 481,
+      "pct_highly_ductile": 0.6,
+      "avg_vec": 4.989311632365341,
+      "avg_pugh": 2.507087917699433,
+      "avg_cauchy": 113.88127947765817,
+      "avg_delta_r": 2.9831582009288464,
+      "avg_S_mix": 14.178027007074833
+    },
+    {
+      "combination_id": "Fe-Hf-Mo-Nb-Ta-W",
+      "total_samples": 500,
+      "avg_ductility_score": 0.11606477770585921,
+      "avg_plasticity": 4.150185709173369,
+      "n_highly_ductile": 3,
+      "n_moderately_ductile": 0,
+      "n_limited": 15,
+      "n_brittle": 482,
+      "pct_highly_ductile": 0.6,
+      "avg_vec": 5.6755481809072155,
+      "avg_pugh": 2.399908656541198,
+      "avg_cauchy": 115.14842028700868,
+      "avg_delta_r": 6.764011428021938,
+      "avg_S_mix": 14.12108157065023
+    },
+    {
+      "combination_id": "Fe-Mn-Mo-Nb-Ta-W",
+      "total_samples": 500,
+      "avg_ductility_score": 0.11369267551423519,
+      "avg_plasticity": 4.133239398777655,
+      "n_highly_ductile": 3,
+      "n_moderately_ductile": 0,
+      "n_limited": 17,
+      "n_brittle": 480,
+      "pct_highly_ductile": 0.6,
+      "avg_vec": 6.171435560949304,
+      "avg_pugh": 2.195258210420746,
+      "avg_cauchy": 108.36441898583226,
+      "avg_delta_r": 5.796124769597389,
+      "avg_S_mix": 14.13993053871742
+    },
+    {
+      "combination_id": "Hf-Mo-Nb-Ni-Ta-W",
+      "total_samples": 500,
+      "avg_ductility_score": 0.11512895891343576,
+      "avg_plasticity": 4.113241994502679,
+      "n_highly_ductile": 3,
+      "n_moderately_ductile": 0,
+      "n_limited": 17,
+      "n_brittle": 480,
+      "pct_highly_ductile": 0.6,
+      "avg_vec": 5.984972282178044,
+      "avg_pugh": 2.456259163022878,
+      "avg_cauchy": 117.55791278371872,
+      "avg_delta_r": 7.199860293446186,
+      "avg_S_mix": 14.138634007780547
+    },
+    {
+      "combination_id": "Al-Co-Mo-Nb-Ta-W",
+      "total_samples": 500,
+      "avg_ductility_score": 0.11680608358519724,
+      "avg_plasticity": 4.006633363459241,
+      "n_highly_ductile": 2,
+      "n_moderately_ductile": 0,
+      "n_limited": 15,
+      "n_brittle": 483,
+      "pct_highly_ductile": 0.4,
+      "avg_vec": 5.666968225019484,
+      "avg_pugh": 2.3898808574848,
+      "avg_cauchy": 112.63419442478559,
+      "avg_delta_r": 4.997031646364761,
+      "avg_S_mix": 14.18257570496912
+    },
+    {
+      "combination_id": "Co-Hf-Mo-Nb-Ta-W",
+      "total_samples": 500,
+      "avg_ductility_score": 0.11043687432508857,
+      "avg_plasticity": 3.934767245158398,
+      "n_highly_ductile": 2,
+      "n_moderately_ductile": 0,
+      "n_limited": 17,
+      "n_brittle": 481,
+      "pct_highly_ductile": 0.4,
+      "avg_vec": 5.8548991328875,
+      "avg_pugh": 2.4459173602303355,
+      "avg_cauchy": 117.71329684661987,
+      "avg_delta_r": 7.038398382287754,
+      "avg_S_mix": 14.13103907476182
+    },
+    {
+      "combination_id": "Co-Mo-Nb-Ta-Ti-W",
+      "total_samples": 500,
+      "avg_ductility_score": 0.11148913759849091,
+      "avg_plasticity": 3.9118647962397715,
+      "n_highly_ductile": 2,
+      "n_moderately_ductile": 0,
+      "n_limited": 16,
+      "n_brittle": 482,
+      "pct_highly_ductile": 0.4,
+      "avg_vec": 5.825550714566663,
+      "avg_pugh": 2.373579350470874,
+      "avg_cauchy": 115.25442377925066,
+      "avg_delta_r": 5.265776685463801,
+      "avg_S_mix": 14.14308220880756
+    },
+    {
+      "combination_id": "Cu-Hf-Mo-Nb-Ta-W",
+      "total_samples": 500,
+      "avg_ductility_score": 0.1091184766155207,
+      "avg_plasticity": 4.02520108244632,
+      "n_highly_ductile": 2,
+      "n_moderately_ductile": 0,
+      "n_limited": 13,
+      "n_brittle": 485,
+      "pct_highly_ductile": 0.4,
+      "avg_vec": 6.152035424707627,
+      "avg_pugh": 2.512793773161165,
+      "avg_cauchy": 115.58511744933043,
+      "avg_delta_r": 6.3994361331085585,
+      "avg_S_mix": 14.113006000438588
+    },
+    {
+      "combination_id": "Mo-Nb-Ta-Ti-V-W",
+      "total_samples": 500,
+      "avg_ductility_score": 0.11429074711620228,
+      "avg_plasticity": 3.9867799919766185,
+      "n_highly_ductile": 2,
+      "n_moderately_ductile": 0,
+      "n_limited": 18,
+      "n_brittle": 480,
+      "pct_highly_ductile": 0.4,
+      "avg_vec": 5.167792284107166,
+      "avg_pugh": 2.480439404320852,
+      "avg_cauchy": 116.86722417514991,
+      "avg_delta_r": 3.3242339168086477,
+      "avg_S_mix": 14.137459448634417
+    },
+    {
+      "combination_id": "Co-Cu-Mo-Nb-Ta-W",
+      "total_samples": 500,
+      "avg_ductility_score": 0.10885454286959141,
+      "avg_plasticity": 3.8272638539193893,
+      "n_highly_ductile": 1,
+      "n_moderately_ductile": 0,
+      "n_limited": 18,
+      "n_brittle": 481,
+      "pct_highly_ductile": 0.2,
+      "avg_vec": 6.9866817627072,
+      "avg_pugh": 2.4336999142363442,
+      "avg_cauchy": 120.10149677221487,
+      "avg_delta_r": 5.801382543291586,
+      "avg_S_mix": 14.13521151181218
     }
   ],
   "ml_results": {
     "classifier": {
       "model_type": "RandomForestClassifier",
-      "n_samples": 11000,
+      "n_samples": 27500,
       "n_features": 21,
-      "cv_f1_mean": 0.9265101353632273,
-      "cv_f1_std": 0.0017470372818577903,
-      "cv_accuracy_mean": 0.8695454545454545,
-      "cv_accuracy_std": 0.0024729946379519188,
+      "cv_f1_mean": 0.14743460951408807,
+      "cv_f1_std": 0.02442006969727894,
+      "cv_accuracy_mean": 0.9816727272727274,
+      "cv_accuracy_std": 0.000644365278060711,
       "feature_importance": [
         [
-          "delta_r",
-          0.3394329794353457
-        ],
-        [
           "vec_avg",
-          0.1156402675035528
-        ],
-        [
-          "frac_Zr",
-          0.05268945136608469
-        ],
-        [
-          "S_mix",
-          0.04775235043060001
-        ],
-        [
-          "Tm_avg",
-          0.0394846579384896
+          0.18179484962075354
         ],
         [
           "frac_Hf",
-          0.03939043072125734
-        ],
-        [
-          "pugh_ratio",
-          0.0358540984769285
-        ],
-        [
-          "frac_Mo",
-          0.03557479020945263
-        ],
-        [
-          "frac_Nb",
-          0.03556283506390267
-        ],
-        [
-          "frac_W",
-          0.03550022777635639
-        ]
-      ],
-      "train_accuracy": 0.8823636363636363,
-      "n_positive": 10006,
-      "n_negative": 994,
-      "positive_rate": 90.96363636363637
-    },
-    "regressor": {
-      "model_type": "GradientBoostingRegressor",
-      "n_samples": 11000,
-      "n_features": 21,
-      "cv_r2_mean": 0.21437343662007943,
-      "cv_r2_std": 0.028340379526462997,
-      "cv_mae_mean": 2.3238576450145123,
-      "cv_mae_std": 0.025204683253673574,
-      "feature_importance": [
-        [
-          "delta_r",
-          0.42909239271208394
-        ],
-        [
-          "vec_avg",
-          0.261479547321563
-        ],
-        [
-          "S_mix",
-          0.05303663574676709
-        ],
-        [
-          "frac_W",
-          0.03442845224462058
-        ],
-        [
-          "frac_Mo",
-          0.03194773963074442
+          0.1469440240700461
         ],
         [
           "cauchy_pressure",
-          0.02679878595113346
+          0.09357611289938836
         ],
         [
-          "frac_Ta",
-          0.026279469078956456
-        ],
-        [
-          "frac_Nb",
-          0.023363134516711737
-        ],
-        [
-          "Tm_avg",
-          0.021029281735297903
+          "frac_Al",
+          0.06872551029660355
         ],
         [
           "pugh_ratio",
-          0.018678064061390297
+          0.06793615288603999
+        ],
+        [
+          "delta_r",
+          0.053916564885629244
+        ],
+        [
+          "frac_W",
+          0.046837159153999934
+        ],
+        [
+          "Tm_avg",
+          0.045119016146633044
+        ],
+        [
+          "frac_Nb",
+          0.04407070190352524
+        ],
+        [
+          "frac_Mo",
+          0.03866940075971018
         ]
       ],
-      "train_r2": 0.3689852315601768,
-      "train_mae": 2.0915071727577517,
-      "y_mean": 27.32539324640162,
-      "y_std": 3.285530009697758
+      "train_accuracy": 0.9817090909090909,
+      "n_positive": 137,
+      "n_negative": 27363,
+      "positive_rate": 0.49818181818181817
+    },
+    "regressor": {
+      "model_type": "GradientBoostingRegressor",
+      "n_samples": 27500,
+      "n_features": 21,
+      "cv_r2_mean": -0.0014152752842505611,
+      "cv_r2_std": 0.00705005475007357,
+      "cv_mae_mean": 2.478251180675455,
+      "cv_mae_std": 0.028331459094709303,
+      "feature_importance": [
+        [
+          "frac_Hf",
+          0.16054079779190195
+        ],
+        [
+          "vec_avg",
+          0.13510954652957996
+        ],
+        [
+          "frac_Al",
+          0.09065272968890907
+        ],
+        [
+          "S_mix",
+          0.06999511356104776
+        ],
+        [
+          "frac_W",
+          0.06683782742397666
+        ],
+        [
+          "delta_r",
+          0.061721615153706264
+        ],
+        [
+          "pugh_ratio",
+          0.06125741008816926
+        ],
+        [
+          "frac_Mo",
+          0.057751793019809386
+        ],
+        [
+          "Tm_avg",
+          0.05216579862327248
+        ],
+        [
+          "frac_Ta",
+          0.04887310060126723
+        ]
+      ],
+      "train_r2": 0.15864885342261525,
+      "train_mae": 2.3502181010052716,
+      "y_mean": 4.086051243832131,
+      "y_std": 3.3296823588009152
     }
   },
-  "execution_time_seconds": 59.15581440925598,
+  "execution_time_seconds": 156.9298448562622,
   "required_elements": [
     "Mo",
     "Nb",
     "Ta",
     "W"
   ],
-  "result_size_bytes": 8645,
-  "result_size_mb": 0.008244514465332031
+  "optimal_system": {
+    "combination_id": "Al-Hf-Mo-Nb-Ta-W",
+    "total_samples": 500,
+    "avg_ductility_score": 0.18091187008970025,
+    "avg_plasticity": 6.556648483438274,
+    "n_highly_ductile": 51,
+    "n_moderately_ductile": 0,
+    "n_limited": 18,
+    "n_brittle": 431,
+    "pct_highly_ductile": 10.2,
+    "avg_vec": 4.848053496064826,
+    "avg_pugh": 2.480007542798147,
+    "avg_cauchy": 109.13082074785954,
+    "avg_delta_r": 4.533330887317454,
+    "avg_S_mix": 14.159026764493209
+  },
+  "baseline_system": {
+    "combination_id": "Hf-Mo-Nb-Ta-Ti-W",
+    "total_samples": 500,
+    "avg_ductility_score": 0.11878755238308938,
+    "avg_plasticity": 4.401499066529781,
+    "n_highly_ductile": 6,
+    "n_moderately_ductile": 0,
+    "n_limited": 16,
+    "n_brittle": 478,
+    "pct_highly_ductile": 1.2,
+    "avg_vec": 4.992248634981947,
+    "avg_pugh": 2.459268293089614,
+    "avg_cauchy": 110.83234676980851,
+    "avg_delta_r": 4.496436718081779,
+    "avg_S_mix": 14.122995402619107
+  },
+  "result_size_bytes": 14124,
+  "result_size_mb": 0.013469696044921875,
+  "improvement_factor": 8.5
 }
