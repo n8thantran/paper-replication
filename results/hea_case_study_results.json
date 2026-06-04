@@ -436,7 +436,7 @@
       "y_std": 3.2745191778581826
     }
   },
-  "execution_time_seconds": 56.697208881378174,
+  "execution_time_seconds": 56.36411714553833,
   "required_elements": [
     "Mo",
     "Nb",
@@ -475,7 +475,7 @@
     "avg_delta_r": 4.485396010708999,
     "avg_S_mix": 14.12189582811585
   },
-  "result_size_bytes": 13947,
-  "result_size_mb": 0.013300895690917969,
+  "result_size_bytes": 13946,
+  "result_size_mb": 0.013299942016601562,
   "improvement_factor": 13.0
 }
