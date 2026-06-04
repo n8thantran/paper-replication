@@ -23,10 +23,10 @@ echo "  ✓ Dependencies installed"
 echo ""
 
 # ============================================================================
-# Result 1: HEA Case Study (Paper Section 4.1, Table 1)
+# Result 1: HEA Case Study (Paper Section 4, Table 1)
 # ============================================================================
 echo "[2/6] Running HEA Case Study..."
-echo "  This reproduces the main case study from Section 4.1:"
+echo "  This reproduces the main case study from Section 4:"
 echo "  - 5,005 six-element combinations from 15-element palette"
 echo "  - 55 MoNbTaW-containing combinations screened"
 echo "  - Optimal system identification with ductility improvement"
@@ -88,44 +88,10 @@ echo "  - General Q&A evaluation"
 echo ""
 
 python3 -c "
-import sys, json
+import sys
 sys.path.insert(0, '/workspace')
-from executors.alpha_agent_executor import AlphaAgentExecutor
-
-print('Initializing AlphaAgent Executor...')
-executor = AlphaAgentExecutor()
-
-print('Running evaluation pipeline...')
-results = executor.run_evaluation()
-
-# Save results
-with open('/workspace/results/alpha_agent_evaluation.json', 'w') as f:
-    json.dump(results, f, indent=2, default=str)
-
-# Generate Table 2
-print()
-print('=' * 60)
-print('Table 2: AlphaAgent Evaluation Scores')
-print('=' * 60)
-print(f'{\"Category\":<25} {\"Score\":<10} {\"Paper Score\":<12}')
-print('-' * 47)
-deep = results['deep_analytical']
-gen = results['general']
-print(f'{\"Deep Analytical\":<25} {deep[\"avg_score\"]:.2f}/5.0  4.66/5.0')
-print(f'{\"General\":<25} {gen[\"avg_score\"]:.2f}/5.0  4.46/5.0')
-print(f'{\"Overall\":<25} {results[\"overall_avg\"]:.2f}/5.0  ~4.56/5.0')
-print('=' * 60)
-
-# Save Table 2 text
-with open('/workspace/results/table2.txt', 'w') as f:
-    f.write('Table 2: AlphaAgent Evaluation Scores\\n')
-    f.write('=' * 50 + '\\n')
-    f.write(f'{\"Category\":<25} {\"Score\":<10} {\"Paper Score\":<12}\\n')
-    f.write('-' * 50 + '\\n')
-    f.write(f'{\"Deep Analytical\":<25} {deep[\"avg_score\"]:.2f}/5.0  4.66/5.0\\n')
-    f.write(f'{\"General\":<25} {gen[\"avg_score\"]:.2f}/5.0  4.46/5.0\\n')
-    f.write(f'{\"Overall\":<25} {results[\"overall_avg\"]:.2f}/5.0  ~4.56/5.0\\n')
-    f.write('=' * 50 + '\\n')
+from executors.alpha_agent_executor import run_alpha_agent_evaluation
+run_alpha_agent_evaluation()
 "
 echo "  ✓ AlphaAgent evaluation saved to results/alpha_agent_evaluation.json"
 echo "  ✓ Table 2 saved to results/table2.txt"
@@ -169,7 +135,7 @@ echo "Results directory contents:"
 ls -la /workspace/results/
 echo ""
 echo "Key files:"
-echo "  results/hea_case_study_results.json  - HEA case study (Section 4.1)"
+echo "  results/hea_case_study_results.json  - HEA case study (Section 4)"
 echo "  results/alpha_agent_evaluation.json  - AlphaAgent scores (Table 2)"
 echo "  results/table2.txt                   - Table 2 formatted"
 echo "  results/table3.txt                   - Table 3 formatted"
