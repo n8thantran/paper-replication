@@ -440,19 +440,16 @@ class HEADatabase:
         conditions = [f"elements_sorted LIKE '%{elem}%'" for elem in required_elements]
         where_clause = " AND ".join(conditions)
         
-        query = f"SELECT * FROM read_parquet('{parquet_path}') WHERE {where_clause}"
-        return self.conn.execute(query).fetchdf()
-    
-    def get_unique_combinations_containing(self, required_elements: List[str]) -> List[str]:
-        """Get unique element combinations containing all specified elements."""
-        parquet_path = os.path.join(self.parquet_dir, "hea_data.parquet")
-        conditions = [f"elements_sorted LIKE '%{elem}%'" for elem in required_elements]
-        where_clause = " AND ".join(conditions)
-        
-        query = f"""
-        SELECT DISTINCT combination_id FROM read_parquet('{parquet_path}')
-        WHERE {where_clause} ORDER BY combination_id
-        """
+        if where_clause:
+            query = f"""
+            SELECT DISTINCT combination_id FROM read_parquet('{parquet_path}')
+            WHERE {where_clause} ORDER BY combination_id
+            """
+        else:
+            query = f"""
+            SELECT DISTINCT combination_id FROM read_parquet('{parquet_path}')
+            ORDER BY combination_id
+            """
         result = self.conn.execute(query).fetchdf()
         return result['combination_id'].tolist()
     
@@ -531,7 +528,7 @@ class HEA_DBA:
     
     def execute_query(self, parsed_task: dict) -> dict:
         required = parsed_task['required_elements']
-        matching_combos = self.db.get_unique_combinations_containing(required)
+        matching_combos = self.db.query_combinations_containing(required)
         
         combo_stats = []
         for combo_id in matching_combos:
