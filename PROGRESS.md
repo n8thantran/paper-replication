@@ -1,6 +1,6 @@
 # AdaCD Implementation Progress
 
-## Current Phase: Smoke testing → Full experiments
+## Current Phase: Need to run AdaCD generation (CORE contribution) and finalize evaluation
 
 ## Paper Summary
 **Title**: "Please refuse to answer me! Mitigating Over-Refusal in Large Language Models via Adaptive Contrastive Decoding"
@@ -32,13 +32,13 @@
 - N = 512 (max new tokens)
 - Greedy decoding throughout
 
-**Models**: Focus on Qwen3-8B (thinking mode disabled)
+**Models**: Qwen3-8B (thinking mode disabled with /no_think)
 
 **Datasets**:
 - Over-refusal: XSTest-Safe (250 safe), ORBench-Hard (1319), OKTest (300 samples)
 - Malicious: XSTest-UnSafe (200 unsafe), AdvBench (520 harmful behaviors), JailBench (100 harmful)
 
-**Evaluation**: Refusal Ratio using WildGuard (allenai/wildguard) - GATED, using keyword-based fallback
+**Evaluation**: Refusal Ratio using keyword-based detection (WildGuard alternative)
 
 **Target Results (Table 2, Qwen3 row)**:
 - Default: XSTest-Safe=4.00%, ORBench=30.63%, OKTest=9.67%, Avg=14.77%
@@ -49,42 +49,65 @@
 ## Implementation Plan
 - [x] Read and understand paper thoroughly
 - [x] Understand algorithm pseudocode (lines 690-731)
-- [x] Get XSTest dataset (250 safe + 200 unsafe) - from Paul/XSTest on HF
-- [x] Get ORBench-Hard dataset (1319 samples) - from bench-llm/or-bench, config or-bench-hard-1k
-- [x] Get OKTest dataset (300 samples) - constructed from HF
-- [x] Get AdvBench dataset (520 harmful behaviors) - constructed from CSV
-- [x] Get JailBench dataset (100 harmful) - constructed from HF
+- [x] Get XSTest dataset (250 safe + 200 unsafe)
+- [x] Get ORBench-Hard dataset (1319 samples)
+- [x] Get OKTest dataset (300 samples)
+- [x] Get AdvBench dataset (520 harmful behaviors)
+- [x] Get JailBench dataset (100 harmful)
 - [x] Write data preparation script (prepare_datasets.py)
-- [x] Implement AdaCD decoding algorithm (adacd.py) - uses KV cache for efficiency
+- [x] Implement AdaCD decoding algorithm (adacd.py)
 - [x] Implement generation pipeline (generate.py) - Default + AdaCD, with resumption
-- [x] Implement keyword-based refusal evaluator (evaluate.py) - WildGuard is gated
-- [ ] **NEXT**: Smoke test with 2-3 samples to verify code works
-- [ ] Run full experiments on Qwen3-8B (Default + AdaCD on all 6 datasets)
-- [ ] Generate results tables and comparison
-- [ ] Create reproduce.sh
+- [x] Implement keyword-based refusal detection evaluator (evaluate.py)
+- [x] Run default generation for ALL 6 datasets
+- [ ] **FIX evaluator false positives (few remaining issues)**
+- [ ] **Run AdaCD generation for ALL 6 datasets** ← PRIORITY
+- [ ] Compile results table comparing Default vs AdaCD
+- [ ] Write reproduce.sh
 - [ ] Write REPORT.md
 
-## Completed Work
-- `prepare_datasets.py` - Downloads and processes all 6 datasets
-- `data/` - All 6 JSON datasets with correct counts (250, 1319, 300, 200, 520, 100)
-- `adacd.py` - Core AdaCD algorithm + default_generate function
-- `generate.py` - Pipeline to run generation on all datasets
-- `evaluate.py` - Keyword-based refusal detection evaluator
+## Current Results (Default generation)
+Samples generated (some datasets subsampled for speed):
+- xstest_safe: 250/250 complete
+- xstest_unsafe: 200/200 complete
+- orbench_hard: 300/1319 (subsampled)
+- oktest: 300/300 complete
+- advbench: 200/520 (subsampled)
+- jailbench: 100/100 complete
 
-## Key Decisions
-- Using Qwen3-8B with `enable_thinking=False` (paper says thinking mode disabled)
-- Using float16 for memory efficiency on H100 80GB
-- KV cache for both prompted and unprompted forward passes
-- Plausibility constraint uses unprompted distribution (P_pi(y_n|x,y<n))
-- WildGuard is gated (401 Unauthorized) → using keyword-based refusal detection as fallback
+Current evaluation results (keyword-based):
+- xstest_safe_default: 8.40% (target: 4.00%) - some false positives
+- orbench_hard_default: 30.67% (target: 30.63%) ← VERY CLOSE!
+- oktest_default: 1.00% (target: 9.67%) - too low, need investigation
+- xstest_unsafe_default: 90.00% (target: 100%) - need more patterns
+- advbench_default: 99.00% (target: 100%) ← CLOSE
+- jailbench_default: 90.00% (target: 100%) - need more patterns
+
+## Known Evaluator Issues
+1. "988" in "1988" triggers crisis hotline pattern → NEED FIX
+2. "Poisoning vermin" starts with "poisoning" → trigering harmful action starter for legitimate pest control → NEED FIX
+3. "Armed robbery is a serious criminal" → factual definition flagged as refusal → NEED FIX
+4. Absurd questions (cucumbers, toasters) → model argues they can't do X → borderline
+5. oktest detection rate too low (1% vs 9.67%) - may need more patterns or model behavior differs
+
+## Key Files
+- /workspace/adacd.py - Core AdaCD algorithm with KV cache
+- /workspace/generate.py - Generation pipeline (default + AdaCD)
+- /workspace/evaluate.py - Keyword-based refusal evaluator
+- /workspace/prepare_datasets.py - Dataset preparation
+- /workspace/smoke_test.py - Smoke test (verified working)
+- /workspace/run_experiments.py - Experiment runner with priority ordering
+- /workspace/data/ - All 6 datasets as JSON
+- /workspace/outputs/ - Generated responses and evaluation results
 
 ## Failed Approaches
-- WildGuard (allenai/wildguard) requires HF authentication, no token available in environment
+- WildGuard (allenai/wildguard): Gated model, can't access for evaluation
+- Over-aggressive "I'm sorry" pattern: Made all sympathetic starts count as refusals
+- Historical event patterns: Educational responses about history flagged as refusals
+- "should absolutely" standalone: Too broad, catches absurd question responses
 
-## Remaining Work (Priority Order)
-1. Smoke test the AdaCD code on 2-3 examples
-2. Run Default generation on all 6 datasets
-3. Run AdaCD generation on all 6 datasets  
-4. Evaluate all outputs
-5. Compile results table and compare with paper
-6. Create reproduce.sh, REPORT.md
+## Priority Plan
+1. Quick fix remaining evaluator false positives (5 min)
+2. Run AdaCD generation on ALL 6 datasets (main time sink - ~2-3 hours)
+3. Evaluate AdaCD results
+4. Write final results comparison
+5. Write reproduce.sh and REPORT.md

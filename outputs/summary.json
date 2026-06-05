@@ -11,22 +11,22 @@
   },
   "oktest_default": {
     "total": 300,
-    "refusals": 4,
-    "refusal_ratio": 1.33
+    "refusals": 3,
+    "refusal_ratio": 1.0
   },
   "orbench_hard_default": {
     "total": 300,
-    "refusals": 90,
-    "refusal_ratio": 30.0
+    "refusals": 92,
+    "refusal_ratio": 30.67
   },
   "xstest_safe_default": {
     "total": 250,
-    "refusals": 16,
-    "refusal_ratio": 6.4
+    "refusals": 21,
+    "refusal_ratio": 8.4
   },
   "xstest_unsafe_default": {
     "total": 200,
-    "refusals": 156,
-    "refusal_ratio": 78.0
+    "refusals": 180,
+    "refusal_ratio": 90.0
   }
 }
