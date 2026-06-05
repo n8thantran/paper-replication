@@ -12,10 +12,8 @@ Key hyperparameters:
 - k = 10 (contrastive decoding steps)
 - N = 512 (max new tokens)
 
-ΔP is computed as the probability difference P_prompted - P_unprompted.
-This isolates the refusal token distribution: tokens that get boosted
-by the extreme safety prompt have positive ΔP (refusal tokens),
-while tokens that get suppressed have negative ΔP (non-refusal tokens).
+ΔP is computed as softmax(logits_prompted - logits_unprompted).
+This isolates the refusal token distribution.
 """
 
 import torch
@@ -45,22 +43,14 @@ def adacd_generate(
     - Model without system prompt (unprompted)
     - Model with extreme system prompt (prompted)
     
-    After k tokens, falls back to standard greedy decoding using model.generate().
+    After k tokens, falls back to standard greedy decoding.
     
-    Args:
-        model: HuggingFace model
-        tokenizer: HuggingFace tokenizer
-        user_query: The user's input query
-        alpha: Contrastive strength parameter
-        lambda_: Agreement threshold
-        beta: Plausibility constraint parameter
-        k: Number of contrastive decoding steps
-        max_new_tokens: Maximum number of new tokens to generate
-        system_prompt: The extreme system prompt p*
-        device: Device to run on
-    
-    Returns:
-        Generated response string
+    Algorithm from paper:
+    - ΔP_n = softmax(logits_prompted - logits_unprompted)
+    - If agreement high (malicious): P* = P_prompted + α·ΔP  (reinforce refusal)
+    - If agreement low (over-refusal): P* = P_prompted - α·ΔP  (suppress refusal)
+    - Plausibility constraint: only tokens where P_unprompted >= β·max(P_unprompted)
+    - After k steps: standard greedy from unprompted model
     """
     model.eval()
     
@@ -142,22 +132,19 @@ def adacd_generate(
         P_unprompted = F.softmax(logits_unprompted, dim=-1)  # P_pi(y_n | x, y<n)
         P_prompted = F.softmax(logits_prompted, dim=-1)      # P_pi(y_n | p*, x, y<n)
         
-        # Step 1: Get top-1 token from prompted model
+        # Step 1: Get top-1 token from prompted model (Alg line 8)
         y_n_star = torch.argmax(P_prompted, dim=-1)  # [1]
         
-        # Step 2: Calculate agreement ratio
-        # rank = position of y_n_star in sorted P_unprompted (descending)
+        # Step 2: Calculate agreement ratio (Alg lines 9-10)
         sorted_indices = torch.argsort(P_unprompted[0], descending=True)
         rank = (sorted_indices == y_n_star[0]).nonzero(as_tuple=True)[0].item() + 1  # 1-indexed
         agr_n = 1.0 / rank
         
-        # Step 3: Compute refusal token distribution
-        # ΔP_n = P_prompted - P_unprompted (probability difference)
-        # Positive values = tokens boosted by safety prompt (refusal tokens)
-        # Negative values = tokens suppressed by safety prompt (non-refusal tokens)
-        delta_P = P_prompted - P_unprompted
+        # Step 3: Compute refusal token distribution (Alg line 12)
+        # ΔP_n = σ(f_prompted - f_unprompted) = softmax(logits_prompted - logits_unprompted)
+        delta_P = F.softmax(logits_prompted - logits_unprompted, dim=-1)
         
-        # Step 4: Adaptive decoding mode switch
+        # Step 4: Adaptive decoding mode switch (Alg lines 14-15)
         rho = P_unprompted.max().item()       # max prob from unprompted
         rho_star = P_prompted[0, y_n_star[0]].item()  # prob of top token from prompted
         
@@ -169,7 +156,7 @@ def adacd_generate(
             P_star = P_prompted - alpha * delta_P
         
         # Step 5: Apply plausibility constraint
-        # Only allow tokens where P_unprompted >= beta * max(P_unprompted)
+        # W = {y_n in V | P_unprompted(y_n) >= beta * max(P_unprompted)}
         max_P_unprompted = P_unprompted.max()
         plausibility_mask = P_unprompted >= beta * max_P_unprompted
         
@@ -177,7 +164,7 @@ def adacd_generate(
         P_star_masked = P_star.clone()
         P_star_masked[~plausibility_mask] = float('-inf')
         
-        # Step 6: Select token
+        # Step 6: Select token (Alg line 22)
         next_token = torch.argmax(P_star_masked, dim=-1)  # [1]
         
         next_token_id = next_token[0].item()
@@ -193,6 +180,7 @@ def adacd_generate(
         curr_prompted = next_token.unsqueeze(0)
     
     # Phase 2: Standard greedy decoding for remaining tokens using model.generate()
+    # After k steps, fall back to standard decoding from unprompted model (Alg line 25)
     if not eos_hit and len(generated_ids) > 0:
         remaining_tokens = max_new_tokens - len(generated_ids)
         if remaining_tokens > 0:
