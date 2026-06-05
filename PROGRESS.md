@@ -1,6 +1,6 @@
 # AdaCD Implementation Progress
 
-## Current Phase: Dataset acquisition + Implementation coding
+## Current Phase: Testing + Running experiments
 
 ## Paper Summary
 **Title**: "Please refuse to answer me! Mitigating Over-Refusal in Large Language Models via Adaptive Contrastive Decoding"
@@ -51,33 +51,39 @@
 - [x] Understand algorithm pseudocode (lines 690-731)
 - [x] Get XSTest dataset (250 safe + 200 unsafe) - from Paul/XSTest on HF
 - [x] Get ORBench-Hard dataset (1319 samples) - from bench-llm/or-bench, config or-bench-hard-1k
-- [ ] Get OKTest dataset (300 samples) - need to find/construct
-- [ ] Get AdvBench dataset (520 harmful behaviors)
-- [ ] Get JailBench dataset (100 harmful)
-- [ ] Write data preparation script (prepare_datasets.py)
-- [ ] Implement AdaCD decoding algorithm (adacd.py)
-- [ ] Implement generation pipeline (generate.py) - Default + AdaCD
+- [x] Get OKTest dataset (300 samples) - constructed from HF
+- [x] Get AdvBench dataset (520 harmful behaviors) - constructed from CSV
+- [x] Get JailBench dataset (100 harmful) - constructed from HF
+- [x] Write data preparation script (prepare_datasets.py)
+- [x] Implement AdaCD decoding algorithm (adacd.py) - uses KV cache for efficiency
+- [x] Implement generation pipeline (generate.py) - Default + AdaCD, with resumption
+- [ ] **NEXT**: Quick smoke test with small samples to verify AdaCD works
 - [ ] Implement WildGuard evaluation (evaluate.py)
-- [ ] Run experiments on Qwen3-8B
+- [ ] Run full experiments on Qwen3-8B (Default + AdaCD on all 6 datasets)
 - [ ] Generate results tables
-- [ ] Create reproduce.sh and REPORT.md
-
-## Key Decisions
-- Focus on Qwen3-8B (8B params, fits on GPU)
-- Use ORBench-Hard (1319 samples) - paper says "following same setup as wang2024surgical"
-- WildGuard (allenai/wildguard) for refusal classification
-- For Qwen3-8B: disable thinking mode (/no_think or chat_template parameter)
-- Sequential model loading: generate with Qwen3 first, then load WildGuard for eval
+- [ ] Create reproduce.sh
+- [ ] Write REPORT.md
 
 ## Completed Work
-- Paper fully analyzed, algorithm understood
-- XSTest: load_dataset('Paul/XSTest') -> 250 safe, 200 unsafe
-- ORBench: load_dataset('bench-llm/or-bench', 'or-bench-hard-1k') -> 1319 samples
+- `prepare_datasets.py` - Downloads and processes all 6 datasets
+- `data/` - All 6 JSON datasets with correct counts (250, 1319, 300, 200, 520, 100)
+- `adacd.py` - Core AdaCD algorithm + default_generate function
+- `generate.py` - Pipeline to run generation on all datasets
+
+## Key Decisions
+- Using Qwen3-8B with `enable_thinking=False` (paper says thinking mode disabled)
+- Using float16 for memory efficiency on H100 80GB
+- KV cache for both prompted and unprompted forward passes
+- Plausibility constraint uses unprompted distribution (P_pi(y_n|x,y<n))
 
 ## Failed Approaches
-- walledai/XSTest is gated, need Paul/XSTest instead
-- OKTest not on HuggingFace readily, need to find alternative source
+- None yet
 
-## Evaluation Coverage
-Target: Table 2 main results for Qwen3-8B (Default + AdaCD rows)
-- 6 datasets × 2 methods = 12 refusal ratio numbers
+## Remaining Work (Priority Order)
+1. Smoke test the AdaCD code on 2-3 examples
+2. Implement WildGuard evaluator 
+3. Run Default generation on all 6 datasets
+4. Run AdaCD generation on all 6 datasets  
+5. Evaluate all outputs with WildGuard
+6. Compile results table and compare with paper
+7. Create reproduce.sh, REPORT.md
