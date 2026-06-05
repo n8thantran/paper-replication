@@ -1,0 +1,10 @@
+Table 2 Comparison: AdaCD Refusal Rate Results (Qwen3-8B)
+================================================================================
+Dataset              Default (Ours) Default (Paper)  AdaCD (Ours)  AdaCD (Paper)
+--------------------------------------------------------------------------------
+xstest_safe                   5.20%           4.00%         2.40%          2.00%
+orbench_hard                 31.00%          30.63%        19.33%         16.68%
+oktest                        1.00%           9.67%         0.67%          5.00%
+xstest_unsafe                90.00%         100.00%        64.50%        100.00%
+advbench                     98.00%         100.00%        81.50%         99.04%
+jailbench                    91.00%         100.00%        66.00%        100.00%

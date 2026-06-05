@@ -1,0 +1,110 @@
+{
+  "xstest_safe_default": {
+    "dataset": "xstest_safe",
+    "method": "default",
+    "type": "safe",
+    "total": 250,
+    "refusals": 13,
+    "refusal_rate": 5.2,
+    "paper_refusal_rate": 4.0
+  },
+  "xstest_safe_adacd": {
+    "dataset": "xstest_safe",
+    "method": "adacd",
+    "type": "safe",
+    "total": 250,
+    "refusals": 6,
+    "refusal_rate": 2.4,
+    "paper_refusal_rate": 2.0
+  },
+  "orbench_hard_default": {
+    "dataset": "orbench_hard",
+    "method": "default",
+    "type": "safe",
+    "total": 300,
+    "refusals": 93,
+    "refusal_rate": 31.0,
+    "paper_refusal_rate": 30.63
+  },
+  "orbench_hard_adacd": {
+    "dataset": "orbench_hard",
+    "method": "adacd",
+    "type": "safe",
+    "total": 300,
+    "refusals": 58,
+    "refusal_rate": 19.33,
+    "paper_refusal_rate": 16.68
+  },
+  "oktest_default": {
+    "dataset": "oktest",
+    "method": "default",
+    "type": "safe",
+    "total": 300,
+    "refusals": 3,
+    "refusal_rate": 1.0,
+    "paper_refusal_rate": 9.67
+  },
+  "oktest_adacd": {
+    "dataset": "oktest",
+    "method": "adacd",
+    "type": "safe",
+    "total": 300,
+    "refusals": 2,
+    "refusal_rate": 0.67,
+    "paper_refusal_rate": 5.0
+  },
+  "xstest_unsafe_default": {
+    "dataset": "xstest_unsafe",
+    "method": "default",
+    "type": "harmful",
+    "total": 200,
+    "refusals": 180,
+    "refusal_rate": 90.0,
+    "paper_refusal_rate": 100.0
+  },
+  "xstest_unsafe_adacd": {
+    "dataset": "xstest_unsafe",
+    "method": "adacd",
+    "type": "harmful",
+    "total": 200,
+    "refusals": 129,
+    "refusal_rate": 64.5,
+    "paper_refusal_rate": 100.0
+  },
+  "advbench_default": {
+    "dataset": "advbench",
+    "method": "default",
+    "type": "harmful",
+    "total": 200,
+    "refusals": 196,
+    "refusal_rate": 98.0,
+    "paper_refusal_rate": 100.0
+  },
+  "advbench_adacd": {
+    "dataset": "advbench",
+    "method": "adacd",
+    "type": "harmful",
+    "total": 200,
+    "refusals": 163,
+    "refusal_rate": 81.5,
+    "paper_refusal_rate": 99.04
+  },
+  "jailbench_default": {
+    "dataset": "jailbench",
+    "method": "default",
+    "type": "harmful",
+    "total": 100,
+    "refusals": 91,
+    "refusal_rate": 91.0,
+    "paper_refusal_rate": 100.0
+  },
+  "jailbench_adacd": {
+    "dataset": "jailbench",
+    "method": "adacd",
+    "type": "harmful",
+    "total": 100,
+    "refusals": 66,
+    "refusal_rate": 66.0,
+    "paper_refusal_rate": 100.0
+  }
+}
