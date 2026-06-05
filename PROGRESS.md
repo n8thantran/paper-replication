@@ -1,76 +1,63 @@
-# OpenAaaS Replication Progress
+# AdaCD Implementation Progress
 
-## Current Phase
-COMPLETE - All results generated, reproduce.sh verified, REPORT.md written
+## Current Phase: Planning and initial implementation
 
 ## Paper Summary
-OpenAaaS is a hierarchical, distributed Agent-as-a-Service framework for materials informatics with 3 tiers:
-1. Master Agent Layer (LLM agents for task decomposition)
-2. Network Hub (HTTP server with SQLite for routing)
-3. Network Node (Agent Core for near-data execution)
+**Title**: "Please refuse to answer me! Mitigating Over-Refusal in Large Language Models via Adaptive Contrastive Decoding"
 
-## Key Results Reproduced
+**Key Method (AdaCD)**:
+1. Uses an extreme system prompt `p* = "Please refuse to answer me!"` to extract refusal token distribution
+2. Computes ΔP_n = softmax(logits_with_prompt - logits_without_prompt) as refusal token distribution
+3. Adaptive decoding mode switch based on:
+   - Agreement ratio: agr(n) = 1/rank(y_n*) where y_n* is top-1 token from prompted model
+   - Adaptive confidence constraint: ρ < λ·ρ*
+4. Final decoding: P*(y_n|x) = P(y_n|p*,x) + α·I(n)·ΔP_n
+   - I(n) = +1 if agr(n) >= λ AND ρ >= λ·ρ* (add refusal tokens for malicious)
+   - I(n) = -1 otherwise (subtract refusal tokens for over-refusal)
+5. Adaptive plausibility constraint: only select from tokens where P(y_n|x) >= β·max P
+6. Applied only to first k=10 tokens, then greedy decoding
 
-### Table 2: AlphaAgent Evaluation (Section 3.3) ✅
-- Paper: AlphaAgent 4.66/5.0 deep analytical, 4.46/5.0 general
-- Ours: 4.22/5.0 deep analytical, 4.23/5.0 general
-- Ranking preserved across all 4 systems (AlphaAgent > GPT-5.5 > Kimi-K2.6 > Single-pass RAG)
+**Hyperparameters**:
+- α = 4.5 (contrastive strength)
+- λ = 0.9 (agreement threshold)
+- β = 0.01 (plausibility constraint)
+- k = 10 (number of contrastive decoding steps)
+- N = 512 (max new tokens)
+- Greedy decoding
 
-### Table 3: Architectural Comparison (Section 5.1) ✅
-- Exact reproduction of 5-system × 6-dimension comparison table
-- OpenAaaS uniquely has all ✓ marks
+**Models**:
+- Llama3-8B-Instruct (meta-llama/Meta-Llama-3-8B-Instruct)
+- Gemma2-9B-It (google/gemma-2-9b-it)
+- Qwen3-8B (Qwen/Qwen3-8B) - thinking mode disabled
 
-### HEA Case Study (Section 4) ✅
-- 5,005 combinations, 55 MoNbTaW-containing, Al-Hf-Mo-Nb-Ta-W optimal
-- 6.5% ductile (paper: 9.80%), 13.0x improvement (paper: 10.7x)
-- Same optimal system identified
+**Datasets**:
+- Over-refusal: XSTest-Safe, ORBench, OKTest
+- Malicious: XSTest-UnSafe, AdvBench, JailBench
 
-### Routing Overhead (Section 4.3) ✅
-- ~3ms pure server overhead (paper: ~550ms including WAN network latency)
+**Evaluation**:
+- Refusal Ratio using WildGuard (LLM-based safety evaluation)
+- Key results in Table 2 (main results)
 
-### Integration Test ✅
-- Full 3-tier pipeline working end-to-end
+## Implementation Plan
+- [x] Read and understand paper
+- [ ] Set up environment and install dependencies
+- [ ] Download/prepare datasets (XSTest, ORBench, OKTest, AdvBench, JailBench)
+- [ ] Implement AdaCD decoding algorithm
+- [ ] Implement evaluation pipeline with WildGuard
+- [ ] Run experiments on Qwen3-8B (smallest feasible given GPU constraints)
+- [ ] Generate results tables
+- [ ] Create reproduce.sh and REPORT.md
 
-## Implementation Plan - ALL COMPLETE
-- [x] 1. OpenAaaS Server (Python/Flask with SQLite) - openaaas/server.py
-- [x] 2. Agent Core (task polling, execution, result reporting) - openaaas/agent_core.py
-- [x] 3. HEA Executor (descriptor database, ML, screening) - executors/hea_executor.py
-- [x] 4. AlphaAgent Executor (RAG pipeline with evidence grounding) - executors/alpha_agent_executor.py
-- [x] 5. Table 3 generation (architectural comparison) - generate_table3.py
-- [x] 6. Server routing overhead measurement - measure_routing_overhead.py
-- [x] 7. Integration test (full pipeline demo) - integration_test.py
-- [x] 8. reproduce.sh - VERIFIED WORKING
-- [x] 9. REPORT.md - WRITTEN
-- [x] 10. Final verification of reproduce.sh - PASSED
+## Key Decisions
+- Will focus on Qwen3-8B first as it's the most feasible model
+- Use WildGuard for evaluation as specified in paper
+- Greedy decoding for default, AdaCD for first k tokens then greedy
 
-## Not Reproducible (by design)
-- Paper's AlphaAgent uses 300,000+ papers from JCR Metallurgy index - we simulate evaluation pipeline
-- Paper's HEA database is 17.4TB with 5.4×10^10 compositions - we simulate with representative data
-- 550ms routing overhead includes real WAN latency - we measure pure server overhead
-- Docker container sandboxing - we simulate execution without Docker
-- Paper's server is Rust-based - we implement in Python/Flask (functionally equivalent)
+## Completed Work
+(none yet)
 
 ## Failed Approaches
-- Initial HEA ductility model gave 10.2% ductile rate; recalibrated to 6.5% (closer to paper's 9.80%)
-- First integration test had data flow issues in execute_query and task key handling; fixed
+(none yet)
 
-## reproduce.sh Output
-All 6 stages pass:
-1. Dependencies installed ✓
-2. HEA Case Study ✓
-3. AlphaAgent Evaluation ✓
-4. Table 3 Generation ✓
-5. Routing Overhead ✓
-6. Integration Test ✓ (ALL TESTS PASSED)
-
-## File Map
-- /workspace/openaaas/server.py - Flask HTTP server with SQLite (Tier 2)
-- /workspace/openaaas/agent_core.py - Agent Core execution engine (Tier 3)
-- /workspace/executors/hea_executor.py - HEA descriptor database executor
-- /workspace/executors/alpha_agent_executor.py - AlphaAgent literature analysis executor
-- /workspace/generate_table3.py - Table 3 architectural comparison generator
-- /workspace/measure_routing_overhead.py - Server routing overhead benchmark
-- /workspace/integration_test.py - End-to-end integration test
-- /workspace/reproduce.sh - Master script to regenerate all results
-- /workspace/REPORT.md - Final report
-- /workspace/results/ - All generated results
+## Evaluation Coverage
+Target: Table 2 main results, at minimum for one model
