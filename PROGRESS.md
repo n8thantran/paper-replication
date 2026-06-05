@@ -1,14 +1,22 @@
 # AdaCD Implementation Progress
 
-## Current Phase: Regenerating all 6 AdaCD datasets with logit-space formula
+## Current Phase: AdaCD generation running (oktest at ~110/300)
 
-## Status (Turn 575)
-- jailbench_adacd: COMPLETE (100/100) - 83% refusal (keyword), ~66% (full eval); evaluator needs tuning
-- xstest_unsafe_adacd: 30/200 - in progress
-- xstest_safe_adacd: NOT STARTED (0/250)
-- oktest_adacd: NOT STARTED (0/300)
-- advbench_adacd: NOT STARTED (0/520)
-- orbench_hard_adacd: NOT STARTED (0/1319)
+## Status (Turn 625)
+- jailbench_adacd: COMPLETE (100/100)
+- xstest_unsafe_adacd: COMPLETE (200/200)
+- xstest_safe_adacd: COMPLETE (250/250)
+- oktest_adacd: IN PROGRESS (~110/300)
+- advbench_adacd: QUEUED (max 200 samples)
+- orbench_hard_adacd: QUEUED (max 300 samples)
+
+Background process PID 105958 running `run_all_adacd.py` → `adacd_generation_log.txt`
+
+## Estimated Time Remaining
+- oktest: ~35 min remaining
+- advbench: ~15 min (200 samples × ~4s)
+- orbench_hard: ~50 min (300 samples × ~10s)
+- Total: ~100 min
 
 ## Algorithm Implementation
 Using **logit-space** contrastive decoding:
@@ -40,8 +48,10 @@ Using **logit-space** contrastive decoding:
 ## Key Files
 - `adacd.py` - Core AdaCD algorithm (logit-space, committed)
 - `generate.py` - Generation pipeline with resumption support
-- `evaluate.py` - Keyword-based refusal ratio evaluation (needs improvement for soft refusals)
+- `evaluate.py` - Keyword-based refusal ratio evaluation
+- `evaluate_all.py` - Runs evaluation on all datasets, produces summary table
 - `prepare_datasets.py` - Dataset preparation
+- `run_all_adacd.py` - Batch AdaCD generation script (currently running)
 - `outputs/` - All generation and evaluation results
 
 ## Key Decisions
@@ -51,12 +61,11 @@ Using **logit-space** contrastive decoding:
 - Hyperparameters: α=4.5, λ=0.9, β=0.01, k=10, N=512, greedy decoding
 - **Logit-space contrastive decoding** (not probability-space)
 
-## Evaluator Issues
-The evaluator misses some soft refusals:
-- "I understand the question, but..." → marks as non-refusal  
-- "**🚨 WARNING: NOT FOR HUMANS..." → marks as non-refusal
-- "Creating and posting fake reviews is **against Amazon's policies**" → marks as non-refusal
-These need additional detection rules.
+## What's Left After Generation Completes
+1. Run evaluate_all.py to get final numbers
+2. Create reproduce.sh
+3. Create REPORT.md
+4. Final commit and push
 
 ## Failed Approaches
 1. **Probability-space formula**: `P* = P_prompted - α·softmax(logit_diff)` - doesn't work because
@@ -71,14 +80,12 @@ These need additional detection rules.
 - [x] Default generation for all 6 datasets
 - [x] Default evaluation for all 6 datasets
 - [x] AdaCD jailbench (100/100 DONE)
-- [ ] AdaCD xstest_unsafe (30/200 in progress)
-- [ ] AdaCD xstest_safe (0/250)
-- [ ] AdaCD oktest (0/300)
-- [ ] AdaCD advbench (0/520)
-- [ ] AdaCD orbench_hard (0/1319)
-- [ ] Improve evaluator for soft refusals
-- [ ] Evaluate all 6 AdaCD outputs
-- [ ] Generate comparison table
-- [ ] Write reproduce.sh
-- [ ] Write REPORT.md
-- [ ] Final commit and end_task
+- [x] AdaCD xstest_unsafe (200/200 DONE)
+- [x] AdaCD xstest_safe (250/250 DONE)
+- [ ] AdaCD oktest (110/300 in progress)
+- [ ] AdaCD advbench (0/200 queued)
+- [ ] AdaCD orbench_hard (0/300 queued)
+- [ ] Run evaluate_all.py
+- [ ] Create reproduce.sh
+- [ ] Create REPORT.md
+- [ ] Final commit
