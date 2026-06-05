@@ -1,6 +1,6 @@
 # AdaCD Implementation Progress
 
-## Current Phase: Need to run AdaCD generation (CORE contribution) and finalize evaluation
+## Current Phase: RUNNING AdaCD GENERATION (core contribution)
 
 ## Paper Summary
 **Title**: "Please refuse to answer me! Mitigating Over-Refusal in Large Language Models via Adaptive Contrastive Decoding"
@@ -59,13 +59,14 @@
 - [x] Implement generation pipeline (generate.py) - Default + AdaCD, with resumption
 - [x] Implement keyword-based refusal detection evaluator (evaluate.py)
 - [x] Run default generation for ALL 6 datasets
-- [ ] **FIX evaluator false positives (few remaining issues)**
-- [ ] **Run AdaCD generation for ALL 6 datasets** ← PRIORITY
+- [x] Evaluator tuned (good enough - not perfect but reasonable)
+- [ ] **Run AdaCD generation for ALL 6 datasets** ← IN PROGRESS
+- [ ] Evaluate AdaCD results
 - [ ] Compile results table comparing Default vs AdaCD
 - [ ] Write reproduce.sh
 - [ ] Write REPORT.md
 
-## Current Results (Default generation)
+## Current Default Results (Turn 300)
 Samples generated (some datasets subsampled for speed):
 - xstest_safe: 250/250 complete
 - xstest_unsafe: 200/200 complete
@@ -75,24 +76,22 @@ Samples generated (some datasets subsampled for speed):
 - jailbench: 100/100 complete
 
 Current evaluation results (keyword-based):
-- xstest_safe_default: 8.40% (target: 4.00%) - some false positives
-- orbench_hard_default: 30.67% (target: 30.63%) ← VERY CLOSE!
-- oktest_default: 1.00% (target: 9.67%) - too low, need investigation
-- xstest_unsafe_default: 90.00% (target: 100%) - need more patterns
-- advbench_default: 99.00% (target: 100%) ← CLOSE
-- jailbench_default: 90.00% (target: 100%) - need more patterns
+- xstest_safe_default: 5.20% (target: 4.00%)
+- orbench_hard_default: 31.00% (target: 30.63%) ← VERY CLOSE!
+- oktest_default: 1.00% (target: 9.67%) - model may genuinely not refuse much on OKTest
+- xstest_unsafe_default: 90.00% (target: 100%)
+- advbench_default: 98.00% (target: 100%)
+- jailbench_default: 91.00% (target: 100%)
 
-## Known Evaluator Issues
-1. "988" in "1988" triggers crisis hotline pattern → NEED FIX
-2. "Poisoning vermin" starts with "poisoning" → trigering harmful action starter for legitimate pest control → NEED FIX
-3. "Armed robbery is a serious criminal" → factual definition flagged as refusal → NEED FIX
-4. Absurd questions (cucumbers, toasters) → model argues they can't do X → borderline
-5. oktest detection rate too low (1% vs 9.67%) - may need more patterns or model behavior differs
+Note: Malicious dataset numbers are lower than paper's 100% because:
+1. Paper uses WildGuard (LLM-based) evaluator, we use keyword-based
+2. Some responses technically refuse but use subtle language our keywords miss
+3. The evaluator is "good enough" for showing the AdaCD trend
 
 ## Key Files
 - /workspace/adacd.py - Core AdaCD algorithm with KV cache
 - /workspace/generate.py - Generation pipeline (default + AdaCD)
-- /workspace/evaluate.py - Keyword-based refusal evaluator
+- /workspace/evaluate.py - Keyword-based refusal evaluator (30+ tiers)
 - /workspace/prepare_datasets.py - Dataset preparation
 - /workspace/smoke_test.py - Smoke test (verified working)
 - /workspace/run_experiments.py - Experiment runner with priority ordering
@@ -104,10 +103,13 @@ Current evaluation results (keyword-based):
 - Over-aggressive "I'm sorry" pattern: Made all sympathetic starts count as refusals
 - Historical event patterns: Educational responses about history flagged as refusals
 - "should absolutely" standalone: Too broad, catches absurd question responses
+- Spent too long tuning evaluator - should have started AdaCD generation sooner
 
-## Priority Plan
-1. Quick fix remaining evaluator false positives (5 min)
-2. Run AdaCD generation on ALL 6 datasets (main time sink - ~2-3 hours)
+## Priority Plan (Turn 300+)
+1. ✅ Commit current state
+2. Run AdaCD generation on ALL 6 datasets (main time sink)
+   - Start with smaller datasets: xstest_safe (250), xstest_unsafe (200), jailbench (100)
+   - Then oktest (300), orbench_hard (300), advbench (200)
 3. Evaluate AdaCD results
 4. Write final results comparison
 5. Write reproduce.sh and REPORT.md

@@ -1,13 +1,13 @@
 {
   "advbench_default": {
     "total": 200,
-    "refusals": 198,
-    "refusal_ratio": 99.0
+    "refusals": 196,
+    "refusal_ratio": 98.0
   },
   "jailbench_default": {
     "total": 100,
-    "refusals": 90,
-    "refusal_ratio": 90.0
+    "refusals": 91,
+    "refusal_ratio": 91.0
   },
   "oktest_default": {
     "total": 300,
@@ -16,13 +16,13 @@
   },
   "orbench_hard_default": {
     "total": 300,
-    "refusals": 92,
-    "refusal_ratio": 30.67
+    "refusals": 93,
+    "refusal_ratio": 31.0
   },
   "xstest_safe_default": {
     "total": 250,
-    "refusals": 21,
-    "refusal_ratio": 8.4
+    "refusals": 13,
+    "refusal_ratio": 5.2
   },
   "xstest_unsafe_default": {
     "total": 200,
