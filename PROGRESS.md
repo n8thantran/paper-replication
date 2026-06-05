@@ -1,22 +1,21 @@
 # AdaCD Implementation Progress
 
-## Current Phase: AdaCD generation running (oktest at ~110/300)
+## Current Phase: AdaCD generation nearly complete (5/6 datasets done, advbench in progress)
 
-## Status (Turn 625)
-- jailbench_adacd: COMPLETE (100/100)
-- xstest_unsafe_adacd: COMPLETE (200/200)
-- xstest_safe_adacd: COMPLETE (250/250)
-- oktest_adacd: IN PROGRESS (~110/300)
-- advbench_adacd: QUEUED (max 200 samples)
-- orbench_hard_adacd: QUEUED (max 300 samples)
+## Status (Turn 650)
+- jailbench_adacd: COMPLETE (100/100) ✅
+- xstest_unsafe_adacd: COMPLETE (200/200) ✅
+- xstest_safe_adacd: COMPLETE (250/250) ✅
+- oktest_adacd: COMPLETE (300/300) ✅
+- advbench_adacd: IN PROGRESS (~50/200, ~2s/sample)
+- orbench_hard_adacd: QUEUED (300 samples, ~11s/sample → ~55min)
 
 Background process PID 105958 running `run_all_adacd.py` → `adacd_generation_log.txt`
 
 ## Estimated Time Remaining
-- oktest: ~35 min remaining
-- advbench: ~15 min (200 samples × ~4s)
-- orbench_hard: ~50 min (300 samples × ~10s)
-- Total: ~100 min
+- advbench: ~5 min remaining
+- orbench_hard: ~55 min (300 samples × ~11s)
+- Total: ~60 min
 
 ## Algorithm Implementation
 Using **logit-space** contrastive decoding:
@@ -53,6 +52,7 @@ Using **logit-space** contrastive decoding:
 - `prepare_datasets.py` - Dataset preparation
 - `run_all_adacd.py` - Batch AdaCD generation script (currently running)
 - `outputs/` - All generation and evaluation results
+- `reproduce.sh` - Reproduction script
 
 ## Key Decisions
 - Using keyword-based refusal detection (paper uses WildGuard but keyword is simpler)
@@ -63,9 +63,10 @@ Using **logit-space** contrastive decoding:
 
 ## What's Left After Generation Completes
 1. Run evaluate_all.py to get final numbers
-2. Create reproduce.sh
+2. Copy results to /workspace/results/
 3. Create REPORT.md
-4. Final commit and push
+4. Verify reproduce.sh works (at least evaluation part)
+5. Final commit and push
 
 ## Failed Approaches
 1. **Probability-space formula**: `P* = P_prompted - α·softmax(logit_diff)` - doesn't work because
@@ -82,10 +83,11 @@ Using **logit-space** contrastive decoding:
 - [x] AdaCD jailbench (100/100 DONE)
 - [x] AdaCD xstest_unsafe (200/200 DONE)
 - [x] AdaCD xstest_safe (250/250 DONE)
-- [ ] AdaCD oktest (110/300 in progress)
-- [ ] AdaCD advbench (0/200 queued)
+- [x] AdaCD oktest (300/300 DONE)
+- [ ] AdaCD advbench (~50/200 in progress)
 - [ ] AdaCD orbench_hard (0/300 queued)
 - [ ] Run evaluate_all.py
-- [ ] Create reproduce.sh
+- [ ] Copy results to /workspace/results/
 - [ ] Create REPORT.md
+- [ ] Verify reproduce.sh
 - [ ] Final commit
