@@ -127,7 +127,7 @@ def run_generation(
             print(f"  [{i+1}/{total}] ({elapsed:.1f}s) {prompt[:60]}...")
         
         # Save periodically
-        if (i + 1) % 50 == 0 or i == total - 1:
+        if (i + 1) % 10 == 0 or i == total - 1:
             with open(output_path, "w") as f:
                 json.dump(results, f, indent=2, ensure_ascii=False)
     
