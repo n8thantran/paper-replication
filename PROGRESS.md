@@ -1,6 +1,6 @@
 # AdaCD Implementation Progress
 
-## Current Phase: Testing + Running experiments
+## Current Phase: Smoke testing → Full experiments
 
 ## Paper Summary
 **Title**: "Please refuse to answer me! Mitigating Over-Refusal in Large Language Models via Adaptive Contrastive Decoding"
@@ -38,7 +38,7 @@
 - Over-refusal: XSTest-Safe (250 safe), ORBench-Hard (1319), OKTest (300 samples)
 - Malicious: XSTest-UnSafe (200 unsafe), AdvBench (520 harmful behaviors), JailBench (100 harmful)
 
-**Evaluation**: Refusal Ratio using WildGuard (allenai/wildguard)
+**Evaluation**: Refusal Ratio using WildGuard (allenai/wildguard) - GATED, using keyword-based fallback
 
 **Target Results (Table 2, Qwen3 row)**:
 - Default: XSTest-Safe=4.00%, ORBench=30.63%, OKTest=9.67%, Avg=14.77%
@@ -57,10 +57,10 @@
 - [x] Write data preparation script (prepare_datasets.py)
 - [x] Implement AdaCD decoding algorithm (adacd.py) - uses KV cache for efficiency
 - [x] Implement generation pipeline (generate.py) - Default + AdaCD, with resumption
-- [ ] **NEXT**: Quick smoke test with small samples to verify AdaCD works
-- [ ] Implement WildGuard evaluation (evaluate.py)
+- [x] Implement keyword-based refusal evaluator (evaluate.py) - WildGuard is gated
+- [ ] **NEXT**: Smoke test with 2-3 samples to verify code works
 - [ ] Run full experiments on Qwen3-8B (Default + AdaCD on all 6 datasets)
-- [ ] Generate results tables
+- [ ] Generate results tables and comparison
 - [ ] Create reproduce.sh
 - [ ] Write REPORT.md
 
@@ -69,21 +69,22 @@
 - `data/` - All 6 JSON datasets with correct counts (250, 1319, 300, 200, 520, 100)
 - `adacd.py` - Core AdaCD algorithm + default_generate function
 - `generate.py` - Pipeline to run generation on all datasets
+- `evaluate.py` - Keyword-based refusal detection evaluator
 
 ## Key Decisions
 - Using Qwen3-8B with `enable_thinking=False` (paper says thinking mode disabled)
 - Using float16 for memory efficiency on H100 80GB
 - KV cache for both prompted and unprompted forward passes
 - Plausibility constraint uses unprompted distribution (P_pi(y_n|x,y<n))
+- WildGuard is gated (401 Unauthorized) → using keyword-based refusal detection as fallback
 
 ## Failed Approaches
-- None yet
+- WildGuard (allenai/wildguard) requires HF authentication, no token available in environment
 
 ## Remaining Work (Priority Order)
 1. Smoke test the AdaCD code on 2-3 examples
-2. Implement WildGuard evaluator 
-3. Run Default generation on all 6 datasets
-4. Run AdaCD generation on all 6 datasets  
-5. Evaluate all outputs with WildGuard
-6. Compile results table and compare with paper
-7. Create reproduce.sh, REPORT.md
+2. Run Default generation on all 6 datasets
+3. Run AdaCD generation on all 6 datasets  
+4. Evaluate all outputs
+5. Compile results table and compare with paper
+6. Create reproduce.sh, REPORT.md
