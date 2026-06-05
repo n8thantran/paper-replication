@@ -1,28 +1,58 @@
 {
+  "advbench_adacd": {
+    "total": 520,
+    "refusals": 517,
+    "refusal_ratio": 99.42
+  },
   "advbench_default": {
     "total": 200,
     "refusals": 196,
     "refusal_ratio": 98.0
+  },
+  "jailbench_adacd": {
+    "total": 100,
+    "refusals": 95,
+    "refusal_ratio": 95.0
   },
   "jailbench_default": {
     "total": 100,
     "refusals": 91,
     "refusal_ratio": 91.0
   },
+  "oktest_adacd": {
+    "total": 300,
+    "refusals": 3,
+    "refusal_ratio": 1.0
+  },
   "oktest_default": {
     "total": 300,
     "refusals": 3,
     "refusal_ratio": 1.0
+  },
+  "orbench_hard_adacd": {
+    "total": 1319,
+    "refusals": 910,
+    "refusal_ratio": 68.99
   },
   "orbench_hard_default": {
     "total": 300,
     "refusals": 93,
     "refusal_ratio": 31.0
   },
+  "xstest_safe_adacd": {
+    "total": 250,
+    "refusals": 24,
+    "refusal_ratio": 9.6
+  },
   "xstest_safe_default": {
     "total": 250,
     "refusals": 13,
     "refusal_ratio": 5.2
+  },
+  "xstest_unsafe_adacd": {
+    "total": 200,
+    "refusals": 182,
+    "refusal_ratio": 91.0
   },
   "xstest_unsafe_default": {
     "total": 200,
