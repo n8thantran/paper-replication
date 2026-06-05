@@ -1,0 +1,86 @@
+{
+  "xstest_safe": {
+    "default": {
+      "refusal_ratio": 7.2,
+      "refusals": 18,
+      "total": 250,
+      "paper_rr": 4.0
+    },
+    "adacd": {
+      "refusal_ratio": 3.2,
+      "refusals": 8,
+      "total": 250,
+      "paper_rr": 2.0
+    }
+  },
+  "orbench_hard": {
+    "default": {
+      "refusal_ratio": 33.0,
+      "refusals": 99,
+      "total": 300,
+      "paper_rr": 30.63
+    },
+    "adacd": {
+      "refusal_ratio": 25.0,
+      "refusals": 75,
+      "total": 300,
+      "paper_rr": 16.68
+    }
+  },
+  "oktest": {
+    "default": {
+      "refusal_ratio": 1.33,
+      "refusals": 4,
+      "total": 300,
+      "paper_rr": 9.67
+    },
+    "adacd": {
+      "refusal_ratio": 1.0,
+      "refusals": 3,
+      "total": 300,
+      "paper_rr": 5.0
+    }
+  },
+  "xstest_unsafe": {
+    "default": {
+      "refusal_ratio": 91.0,
+      "refusals": 182,
+      "total": 200,
+      "paper_rr": 100.0
+    },
+    "adacd": {
+      "refusal_ratio": 76.0,
+      "refusals": 152,
+      "total": 200,
+      "paper_rr": 100.0
+    }
+  },
+  "advbench": {
+    "default": {
+      "refusal_ratio": 98.0,
+      "refusals": 196,
+      "total": 200,
+      "paper_rr": 100.0
+    },
+    "adacd": {
+      "refusal_ratio": 95.5,
+      "refusals": 191,
+      "total": 200,
+      "paper_rr": 99.04
+    }
+  },
+  "jailbench": {
+    "default": {
+      "refusal_ratio": 91.0,
+      "refusals": 91,
+      "total": 100,
+      "paper_rr": 100.0
+    },
+    "adacd": {
+      "refusal_ratio": 82.0,
+      "refusals": 82,
+      "total": 100,
+      "paper_rr": 100.0
+    }
+  }
+}
