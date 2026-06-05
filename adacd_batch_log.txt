@@ -1,0 +1,24 @@
+/usr/local/lib/python3.14/site-packages/torch/cuda/__init__.py:61: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading model...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights:   0%|          | 1/399 [00:00<02:08,  3.10it/s]Loading weights:   7%|▋         | 28/399 [00:00<00:04, 83.02it/s]Loading weights:  11%|█▏        | 45/399 [00:00<00:03, 108.90it/s]Loading weights:  15%|█▌        | 61/399 [00:00<00:03, 107.00it/s]Loading weights:  20%|█▉        | 79/399 [00:00<00:02, 123.72it/s]Loading weights:  24%|██▎       | 94/399 [00:00<00:02, 118.31it/s]Loading weights:  29%|██▉       | 116/399 [00:01<00:01, 142.65it/s]Loading weights:  33%|███▎      | 133/399 [00:01<00:01, 149.98it/s]Loading weights:  38%|███▊      | 150/399 [00:01<00:01, 145.59it/s]Loading weights:  42%|████▏     | 169/399 [00:01<00:01, 139.74it/s]Loading weights:  46%|████▌     | 184/399 [00:01<00:01, 134.07it/s]Loading weights:  51%|█████     | 202/399 [00:01<00:01, 124.94it/s]Loading weights:  54%|█████▍    | 215/399 [00:01<00:01, 118.57it/s]Loading weights:  59%|█████▉    | 235/399 [00:01<00:01, 136.46it/s]Loading weights:  64%|██████▍   | 257/399 [00:02<00:01, 134.90it/s]Loading weights:  70%|██████▉   | 279/399 [00:02<00:00, 149.63it/s]Loading weights:  74%|███████▍  | 295/399 [00:02<00:00, 144.77it/s]Loading weights:  78%|███████▊  | 312/399 [00:02<00:00, 144.81it/s]Loading weights:  84%|████████▎ | 334/399 [00:02<00:00, 142.99it/s]Loading weights:  87%|████████▋ | 349/399 [00:02<00:00, 140.75it/s]Loading weights:  92%|█████████▏| 369/399 [00:02<00:00, 151.90it/s]Loading weights:  97%|█████████▋| 389/399 [00:02<00:00, 159.28it/s]Loading weights: 100%|██████████| 399/399 [00:02<00:00, 134.52it/s]
+Model loaded!
+
+=== jailbench: Resuming from 0/100 ===
+[transformers] The attention mask is not set and cannot be inferred from input because pad token is same as eos token. As a consequence, you may observe unexpected behavior. Please pass your input's `attention_mask` to obtain reliable results.
+  [jailbench] 10/100 (0.19 samples/s, ~8.0min remaining)
+  [jailbench] 20/100 (0.21 samples/s, ~6.5min remaining)
+  [jailbench] 30/100 (0.24 samples/s, ~4.8min remaining)
+  [jailbench] 40/100 (0.22 samples/s, ~4.5min remaining)
+  [jailbench] 50/100 (0.21 samples/s, ~4.0min remaining)
+  [jailbench] 60/100 (0.20 samples/s, ~3.4min remaining)
+  [jailbench] 70/100 (0.21 samples/s, ~2.4min remaining)
+  [jailbench] 80/100 (0.21 samples/s, ~1.6min remaining)
+  [jailbench] 90/100 (0.19 samples/s, ~0.9min remaining)
+  [jailbench] 100/100 (0.19 samples/s, ~0.0min remaining)
+  jailbench complete! 100 samples in 8.8min
+
+=== xstest_unsafe: Resuming from 0/200 ===
+  [xstest_unsafe] 10/200 (0.19 samples/s, ~16.5min remaining)
